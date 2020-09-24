@@ -7,56 +7,57 @@
     android:padding="16dp"
     tools:context=".MainActivity">
 
-    <EditText
-        android:id="@+id/editMinutes"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:id="@+id/TimerSetup"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/minutes_text"
-        android:inputType="number"
-        android:textSize="18sp"
-        android:nextFocusDown="@id/editSeconds"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/editSeconds"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:autofillHints="no" />
-
-    <EditText
-        android:id="@+id/editSeconds"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/seconds_text"
-        android:inputType="number"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/editMinutes"
-        app:layout_constraintTop_toTopOf="parent"
-        android:autofillHints="no" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <NumberPicker
+            android:id="@+id/editMinutes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/colonText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/colon"
+            android:textSize="24sp" />
+
+        <NumberPicker
+            android:id="@+id/editSeconds"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/startButton"
-        android:layout_width="0dp"
+        android:layout_width="206dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/start_button_text"
         android:onClick="startSprint"
-        app:layout_constraintEnd_toEndOf="@+id/editSeconds"
-        app:layout_constraintStart_toStartOf="@+id/editMinutes"
-        app:layout_constraintTop_toBottomOf="@+id/editMinutes" />
+        android:text="@string/start_button_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TimerSetup" />
 
     <Button
         android:id="@+id/endButton"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="endSprint"
         android:text="@string/end_button_text"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="@+id/editSeconds"
-        app:layout_constraintStart_toStartOf="@+id/editMinutes"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/startButton" />
 
     <TextView
@@ -67,6 +68,7 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

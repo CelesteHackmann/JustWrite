@@ -4,4 +4,5 @@
     <string name="start_button_text">Start Sprint</string>
     <string name="seconds_text">seconds</string>
     <string name="minutes_text">minutes</string>
+    <string name="colon">:</string>
 </resources>

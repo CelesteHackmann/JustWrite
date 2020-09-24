@@ -6,18 +6,20 @@ import android.os.CountDownTimer;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
-    EditText mMinuteText;
-    EditText mSecondText;
+    NumberPicker mMinuteText;
+    NumberPicker mSecondText;
     TextView mTimerText;
     Button mStartButton;
     Button mEndButton;
+    LinearLayout mTimerSetup;
     CountDownTimer mTimer;
     private String FORMAT = "%02d:%02d";
 
@@ -30,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
         mStartButton = findViewById(R.id.startButton);
         mEndButton = findViewById(R.id.endButton);
         mTimerText = findViewById(R.id.countdownText);
+        mTimerSetup = findViewById(R.id.TimerSetup);
+        setupNumberPickers();
     }
 
 
@@ -66,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
     private int getMinutes() {
         try {
-            return Integer.parseInt(String.valueOf(mMinuteText.getText()));
+            return Integer.parseInt(String.valueOf(mMinuteText.getValue()));
         } catch (NumberFormatException e) {
             return 0;
         }
@@ -74,26 +78,38 @@ public class MainActivity extends AppCompatActivity {
 
     private int getSeconds() {
         try {
-            return Integer.parseInt(String.valueOf(mSecondText.getText()));
+            return Integer.parseInt(String.valueOf(mSecondText.getValue()));
         } catch (NumberFormatException e) {
             return 0;
         }
     }
 
     private void startTimerVisibility() {
-        mMinuteText.setVisibility(View.INVISIBLE);
-        mSecondText.setVisibility(View.INVISIBLE);
+        mTimerSetup.setVisibility(View.INVISIBLE);
         mStartButton.setVisibility(View.INVISIBLE);
         mTimerText.setVisibility(View.VISIBLE);
         mEndButton.setVisibility(View.VISIBLE);
     }
 
     private void resetVisibility() {
-        mMinuteText.setVisibility(View.VISIBLE);
-        mSecondText.setVisibility(View.VISIBLE);
+        mTimerSetup.setVisibility(View.VISIBLE);
         mStartButton.setVisibility(View.VISIBLE);
         mTimerText.setVisibility(View.GONE);
         mEndButton.setVisibility(View.GONE);
+    }
+
+    private void setupNumberPickers() {
+        mMinuteText.setMinValue(0);
+        mSecondText.setMinValue(0);
+        mMinuteText.setMaxValue(59);
+        mSecondText.setMaxValue(59);
+        mMinuteText.setValue(15);
+        mSecondText.setFormatter(new NumberPicker.Formatter() {
+            @Override
+            public String format(int i) {
+                return String.format("%02d", i);
+            }
+        });
     }
 
     public void hideKeyboard() {
