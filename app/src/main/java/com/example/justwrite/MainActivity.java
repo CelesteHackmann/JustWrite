@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     public void startSprint(View view) {
         hideKeyboard();
         if (mSpinnerProjects.getSelectedItem() == "Select a Project") {
-            ((TextView)mSpinnerProjects.getSelectedView()).setBackgroundResource(R.color.warningColor);
+            mSpinnerProjects.getSelectedView().setBackgroundResource(R.color.warningColor);
         }
         else {
             int minutes = mMinuteText.getValue();

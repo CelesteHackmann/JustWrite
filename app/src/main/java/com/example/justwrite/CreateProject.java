@@ -20,7 +20,6 @@ public class CreateProject extends AppCompatActivity {
         mGenre = findViewById(R.id.editGenre);
     }
 
-
     public void createProject(View view) {
         String pName = String.valueOf(mProjectName.getText());
         String pGenre = String.valueOf(mGenre.getText());
