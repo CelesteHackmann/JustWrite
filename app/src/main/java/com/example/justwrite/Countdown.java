@@ -22,11 +22,13 @@ public class Countdown extends AppCompatActivity {
         setContentView(R.layout.activity_countdown);
         mTimerText = findViewById(R.id.countdownText);
 
+
         Intent intent = getIntent();
         int minutes = intent.getIntExtra("minutes",0);
         int seconds = intent.getIntExtra("seconds", 0);
         startTimer(minutes, seconds);
     }
+
 
     private void startTimer(int minutes, int seconds) {
         final int numInSeconds = minutes * 60 + seconds;
@@ -35,7 +37,7 @@ public class Countdown extends AppCompatActivity {
             public void onTick ( long millisUntilFinished){
                 long remainingSeconds = millisUntilFinished / 1000;
                 int minutesLeft = (int) (remainingSeconds / 60);
-                int secondsLeft = ((int) (remainingSeconds % 60));
+                int secondsLeft = (int) (remainingSeconds % 60);
                 mTimerText.setText(String.format(FORMAT, minutesLeft, secondsLeft));
             }
 
@@ -57,5 +59,9 @@ public class Countdown extends AppCompatActivity {
             mTimerGoing = false;
         }
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 }
