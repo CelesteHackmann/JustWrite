@@ -2,6 +2,10 @@ package com.example.justwrite;
 
 import org.junit.Test;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Calendar;
+
 import static org.junit.Assert.*;
 
 /**
@@ -22,4 +26,15 @@ public class ProjectClassTests {
         Project prj = new Project("Project Restart", "Fiction");
         assertEquals("Title: Project Restart\nGenre: Fiction", prj.toString());
     }
+
+    @Test
+    public void addSprintToExistingProject() {
+        Project project = new Project("SOEN", "Fiction");
+        Sprint sprint = new Sprint(120, 0, Calendar.getInstance());
+        project.addSprint(sprint);
+        ArrayList<Sprint> sprints = new ArrayList<>();
+        sprints.add(sprint);
+        assertEquals(sprints, project.getSprints());
+    }
+
 }

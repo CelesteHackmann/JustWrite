@@ -10,7 +10,6 @@ import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,7 +17,6 @@ public class Countdown extends AppCompatActivity {
     TextView mTimerText;
     CountDownTimer mTimer;
     KeyguardManager myKM;
-
     int mUnfocusedTime = -1;
     private final String FORMAT = "%02d:%02d";
     private boolean mTimerGoing = false;
@@ -59,6 +57,10 @@ public class Countdown extends AppCompatActivity {
                 alertBuilder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent();
+                        intent.putExtra("sprint time", numInSeconds);
+                        intent.putExtra("unfocused time", mUnfocusedTime);
+                        setResult(RESULT_OK, intent);
                         finish();
                     }
                 });

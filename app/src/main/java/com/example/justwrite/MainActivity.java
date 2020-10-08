@@ -2,7 +2,6 @@ package com.example.justwrite;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -10,19 +9,24 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
     NumberPicker mMinuteText;
     NumberPicker mSecondText;
     Spinner mSpinnerProjects;
-    ArrayAdapter<String> arrayAdapter;
-    ArrayList<String> projectNames = new ArrayList<>();
+    ArrayAdapter<Project> arrayAdapter;
+    Calendar c;
+    ArrayList<Project> projects = new ArrayList<>();
+    int currentProjectPosition = 0;
+    private static final int RESULT_CREATE_PROJECT = 1;
+    private static final int RESULT_SPRINT_OVER = 2;
+    private Project defaultProject = new Project("Select a Project", "Undefined");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
         mSpinnerProjects = findViewById(R.id.spinnerProjects);
         setupNumberPickers();
 
-        projectNames.add("Select a Project");
-        arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, projectNames);
+        projects.add(defaultProject);
+        arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, projects);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         mSpinnerProjects.setAdapter(arrayAdapter);
@@ -50,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void startSprint(View view) {
         hideKeyboard();
-        if (mSpinnerProjects.getSelectedItem() == "Select a Project") {
+        if (mSpinnerProjects.getSelectedItem() == defaultProject) {
             mSpinnerProjects.getSelectedView().setBackgroundResource(R.color.warningColor);
         }
         else {
@@ -59,7 +63,8 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this,Countdown.class);
             intent.putExtra("minutes", minutes);
             intent.putExtra("seconds", seconds);
-            startActivity(intent);
+            c = Calendar.getInstance();
+            startActivityForResult(intent, RESULT_SPRINT_OVER);
         }
     }
 
@@ -70,16 +75,22 @@ public class MainActivity extends AppCompatActivity {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
-            if(resultCode == RESULT_OK) {
+        if(resultCode == RESULT_OK) {
+            if (requestCode == RESULT_CREATE_PROJECT) {
                 String pName = data.getStringExtra("name");
                 String pGenre = data.getStringExtra("genre");
                 Project project = new Project(pName, pGenre);
-                arrayAdapter.add(pName);
+                projects.add(project);
                 arrayAdapter.notifyDataSetChanged();
-                mSpinnerProjects.setSelection(arrayAdapter.getPosition(pName));
+                currentProjectPosition = arrayAdapter.getPosition(project);
+                mSpinnerProjects.setSelection(currentProjectPosition);
                 Toast toast = Toast.makeText(this, project.toString(), Toast.LENGTH_SHORT);
                 toast.show();
+            }
+            if (requestCode == RESULT_SPRINT_OVER) {
+                Sprint sprint = new Sprint(data.getIntExtra("sprint time", 0),
+                        data.getIntExtra("unfocused time", 0), c);
+                projects.get(currentProjectPosition).addSprint(sprint);
             }
         }
     }
