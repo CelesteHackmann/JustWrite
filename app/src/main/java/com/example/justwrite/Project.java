@@ -1,18 +1,26 @@
 package com.example.justwrite;
 
 public class Project {
-    String mName;
+    String mTitle;
     String mGenre;
 
 
     public Project(String name, String genre) {
-        mName = name;
+        mTitle = name;
         mGenre = genre;
     }
 
     @Override
     public String toString() {
-        return "Project: " + mName + '\n' +
+        return "Title: " + mTitle + '\n' +
                 "Genre: " + mGenre;
+    }
+
+    public String getTitle() {
+        return mTitle;
+    }
+
+    public String getGenre() {
+        return mGenre;
     }
 }

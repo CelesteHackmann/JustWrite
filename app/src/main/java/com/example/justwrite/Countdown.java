@@ -1,5 +1,6 @@
 package com.example.justwrite;
 
+import android.app.AlertDialog;
 import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.Intent;
@@ -33,7 +34,6 @@ public class Countdown extends AppCompatActivity {
         startTimer(minutes, seconds);
     }
 
-
     private void startTimer(int minutes, int seconds) {
         final int numInSeconds = minutes * 60 + seconds;
 
@@ -52,11 +52,16 @@ public class Countdown extends AppCompatActivity {
 
             @Override
             public void onFinish () {
-                Toast toast = Toast.makeText(getApplicationContext(), "you sprinted for " +
-                        numInSeconds / 60 + " minutes " + numInSeconds % 60 + " seconds \n " +
-                        "you were unfocused for: " + mUnfocusedTime+ " seconds", Toast.LENGTH_SHORT);
-                toast.show();
                 mTimerGoing = false;
+                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(Countdown.this);
+                alertBuilder.setCancelable(false);
+                alertBuilder.setPositiveButton("Save", null);
+                alertBuilder.setTitle("Congratulations!");
+                alertBuilder.setMessage("Total Sprint Time: " +
+                        numInSeconds / 60 + " minutes " + numInSeconds % 60 + " seconds\n " +
+                        "Unfocused Time: " + mUnfocusedTime+ " seconds");
+                AlertDialog alert = alertBuilder.create();
+                alert.show();
             }
         };
         mTimer.start();
