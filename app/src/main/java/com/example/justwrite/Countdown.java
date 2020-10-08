@@ -3,6 +3,7 @@ package com.example.justwrite;
 import android.app.AlertDialog;
 import android.app.KeyguardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -55,13 +56,19 @@ public class Countdown extends AppCompatActivity {
                 mTimerGoing = false;
                 AlertDialog.Builder alertBuilder = new AlertDialog.Builder(Countdown.this);
                 alertBuilder.setCancelable(false);
-                alertBuilder.setPositiveButton("Save", null);
+                alertBuilder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
                 alertBuilder.setTitle("Congratulations!");
-                alertBuilder.setMessage("Total Sprint Time: " +
-                        numInSeconds / 60 + " minutes " + numInSeconds % 60 + " seconds\n " +
+                alertBuilder.setMessage("Sprint Time: " +
+                        numInSeconds / 60 + " minutes " + numInSeconds % 60 + " seconds\n" +
                         "Unfocused Time: " + mUnfocusedTime+ " seconds");
                 AlertDialog alert = alertBuilder.create();
                 alert.show();
+
             }
         };
         mTimer.start();
