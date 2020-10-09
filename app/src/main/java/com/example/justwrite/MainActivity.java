@@ -14,19 +14,20 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
     NumberPicker mMinuteText;
     NumberPicker mSecondText;
     Spinner mSpinnerProjects;
     ArrayAdapter<Project> arrayAdapter;
-    Calendar c;
     ArrayList<Project> projects = new ArrayList<>();
     int currentProjectPosition = 0;
     private static final int RESULT_CREATE_PROJECT = 1;
     private static final int RESULT_SPRINT_OVER = 2;
     private Project defaultProject = new Project("Select a Project", "Undefined");
+
+    boolean TESTING_ON = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,11 @@ public class MainActivity extends AppCompatActivity {
         setupNumberPickers();
 
         projects.add(defaultProject);
+
+        if (TESTING_ON) {
+            setUpForTesting();
+        }
+
         arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, projects);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -63,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this,Countdown.class);
             intent.putExtra("minutes", minutes);
             intent.putExtra("seconds", seconds);
-            c = Calendar.getInstance();
             startActivityForResult(intent, RESULT_SPRINT_OVER);
         }
     }
@@ -89,10 +94,16 @@ public class MainActivity extends AppCompatActivity {
             }
             if (requestCode == RESULT_SPRINT_OVER) {
                 Sprint sprint = new Sprint(data.getIntExtra("sprint time", 0),
-                        data.getIntExtra("unfocused time", 0), c);
+                        data.getIntExtra("unfocused time", 0));
                 projects.get(currentProjectPosition).addSprint(sprint);
             }
         }
+    }
+
+    public void seeSprintLog(View view) {
+        Intent intent = new Intent(this, SprintHistory.class);
+        intent.putExtra("projects", projects);
+        startActivity(intent);
     }
 
     private void setupNumberPickers() {
@@ -107,6 +118,17 @@ public class MainActivity extends AppCompatActivity {
                 return String.format("%02d", i);
             }
         });
+    }
+
+    private void setUpForTesting() {
+        Project testP1 = new Project("Breaking Trust", "Young Adult");
+        Project testP2 = new Project("Start of Everything New", "Contemporary");
+        testP1.addSprint(new Sprint(120,0));
+        testP1.addSprint(new Sprint(1800, 54));
+        testP2.addSprint(new Sprint(320, 24));
+        testP2.addSprint(new Sprint(1200, 67));
+        projects.add(testP1);
+        projects.add(testP2);
     }
 
     private void hideKeyboard() {

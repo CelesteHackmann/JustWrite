@@ -30,7 +30,7 @@ public class ProjectClassTests {
     @Test
     public void addSprintToExistingProject() {
         Project project = new Project("SOEN", "Fiction");
-        Sprint sprint = new Sprint(120, 0, Calendar.getInstance());
+        Sprint sprint = new Sprint(120, 0);
         project.addSprint(sprint);
         ArrayList<Sprint> sprints = new ArrayList<>();
         sprints.add(sprint);
