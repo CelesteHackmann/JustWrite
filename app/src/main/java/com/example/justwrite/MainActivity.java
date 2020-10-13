@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         mSpinnerProjects.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                currentProjectPosition = position;
             }
             @Override
             public void onNothingSelected(AdapterView <?> parent) {
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                 Project project = new Project(pName, pGenre);
                 projects.add(project);
                 arrayAdapter.notifyDataSetChanged();
-                currentProjectPosition = arrayAdapter.getPosition(project);
+//                currentProjectPosition = arrayAdapter.getPosition(project);
                 mSpinnerProjects.setSelection(currentProjectPosition);
                 Toast toast = Toast.makeText(this, project.toString(), Toast.LENGTH_SHORT);
                 toast.show();
