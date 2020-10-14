@@ -6,24 +6,25 @@ import android.os.Parcelable;
 public class Sprint implements Parcelable {
     int mSprintTimeSeconds;
     int mUnfocusedSeconds;
-    String projectName;
+    int mWordCount;
 
-    public Sprint(int numInSeconds, int unfocusedTime) {
+    public Sprint(int numInSeconds, int unfocusedTime, int wordCount) {
         mSprintTimeSeconds = numInSeconds;
         mUnfocusedSeconds = unfocusedTime;
+        mWordCount = wordCount;
     }
 
     protected Sprint(Parcel in) {
         mSprintTimeSeconds = in.readInt();
         mUnfocusedSeconds = in.readInt();
-        projectName = in.readString();
+        mWordCount = in.readInt();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(mSprintTimeSeconds);
         dest.writeInt(mUnfocusedSeconds);
-        dest.writeString(projectName);
+        dest.writeInt(mWordCount);
     }
 
     @Override
@@ -49,7 +50,8 @@ public class Sprint implements Parcelable {
                 "\nUnfocusedSeconds=" + mUnfocusedSeconds;
     }
 
-    public String getProjectName() {
-        return projectName;
+    public int getmWordCount() {
+        return mWordCount;
     }
+
 }

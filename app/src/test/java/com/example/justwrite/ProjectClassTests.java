@@ -2,9 +2,7 @@ package com.example.justwrite;
 
 import org.junit.Test;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import static org.junit.Assert.*;
 
@@ -30,7 +28,7 @@ public class ProjectClassTests {
     @Test
     public void addSprintToExistingProject() {
         Project project = new Project("SOEN", "Fiction");
-        Sprint sprint = new Sprint(120, 0);
+        Sprint sprint = new Sprint(120, 0, );
         project.addSprint(sprint);
         ArrayList<Sprint> sprints = new ArrayList<>();
         sprints.add(sprint);

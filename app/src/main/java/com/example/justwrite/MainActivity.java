@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int RESULT_SPRINT_OVER = 2;
     private Project defaultProject = new Project("Select a Project", "Undefined");
 
-    boolean TESTING_ON = false;
+    boolean TESTING_ON = true;
 
 
     @Override
@@ -88,14 +88,16 @@ public class MainActivity extends AppCompatActivity {
                 Project project = new Project(pName, pGenre);
                 projects.add(project);
                 arrayAdapter.notifyDataSetChanged();
-//                currentProjectPosition = arrayAdapter.getPosition(project);
+                currentProjectPosition = arrayAdapter.getPosition(project);
                 mSpinnerProjects.setSelection(currentProjectPosition);
                 Toast toast = Toast.makeText(this, project.toString(), Toast.LENGTH_SHORT);
                 toast.show();
             }
             if (requestCode == RESULT_SPRINT_OVER) {
-                Sprint sprint = new Sprint(data.getIntExtra("sprint time", 0),
-                        data.getIntExtra("unfocused time", 0));
+                int sprintTime = data.getIntExtra("sprint time", 0);
+                int unfocusedTime = data.getIntExtra("unfocused time", 0);
+                int wordCount = data.getIntExtra("words written", 0);
+                Sprint sprint = new Sprint(sprintTime, unfocusedTime, wordCount);
                 projects.get(currentProjectPosition).addSprint(sprint);
             }
         }
@@ -124,10 +126,10 @@ public class MainActivity extends AppCompatActivity {
     private void setUpForTesting() {
         Project testP1 = new Project("Breaking Trust", "Young Adult");
         Project testP2 = new Project("Start of Everything New", "Contemporary");
-        testP1.addSprint(new Sprint(120,0));
-        testP1.addSprint(new Sprint(1800, 54));
-        testP2.addSprint(new Sprint(320, 24));
-        testP2.addSprint(new Sprint(1200, 67));
+        testP1.addSprint(new Sprint(120,0, 120));
+        testP1.addSprint(new Sprint(1800, 54, 564));
+        testP2.addSprint(new Sprint(320, 24, 300));
+        testP2.addSprint(new Sprint(1200, 67, 153));
         projects.add(testP1);
         projects.add(testP2);
     }

@@ -30,7 +30,7 @@ public class SprintListAdapter extends RecyclerView.Adapter<SprintListAdapter.Sp
     @Override
     public void onBindViewHolder(@NonNull SprintListAdapter.SprintViewHolder holder, int position) {
         Sprint mCurrent = mSprintList.get(position);
-        holder.sprintWordCount.setText("Word Count Goes Here");
+        holder.sprintWordCount.setText(String.valueOf(mCurrent.getmWordCount())+ " words");
         holder.sprintItemView.setText(mCurrent.toString());
     }
 

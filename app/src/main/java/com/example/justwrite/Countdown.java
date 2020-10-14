@@ -7,8 +7,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +24,7 @@ public class Countdown extends AppCompatActivity {
     int mUnfocusedTime = -1;
     private final String FORMAT = "%02d:%02d";
     private boolean mTimerGoing = false;
+    AlertDialog alert;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,25 +57,52 @@ public class Countdown extends AppCompatActivity {
             @Override
             public void onFinish () {
                 mTimerGoing = false;
-                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(Countdown.this);
-                alertBuilder.setCancelable(false);
-                alertBuilder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                LayoutInflater inflater = LayoutInflater.from(Countdown.this);
+                final View layout = inflater.inflate(R.layout.sprint_finished, null);
+                final EditText wordsWrittenText = (EditText) layout.findViewById(R.id.editTextNumber);
+
+                alert = new AlertDialog.Builder(Countdown.this)
+                        .setTitle("Congratulations")
+                        .setView(layout)
+                        .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String wordsString = wordsWrittenText.getText().toString();
+                                int wordCount = Integer.parseInt(wordsString);
+                                Intent intent = new Intent();
+                                intent.putExtra("sprint time", numInSeconds);
+                                intent.putExtra("unfocused time", mUnfocusedTime);
+                                intent.putExtra("words written", wordCount);
+                                setResult(RESULT_OK, intent);
+                                finish();
+                            }
+                        })
+                        .setMessage("Sprint Time: " +
+                        numInSeconds / 60 + " minutes " + numInSeconds % 60 + " seconds\n" +
+                        "Unfocused Time: " + mUnfocusedTime+ " seconds")
+                        .setCancelable(false)
+                        .create();
+                wordsWrittenText.addTextChangedListener(new TextWatcher() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent();
-                        intent.putExtra("sprint time", numInSeconds);
-                        intent.putExtra("unfocused time", mUnfocusedTime);
-                        setResult(RESULT_OK, intent);
-                        finish();
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (s.length() > 0) {
+                            alert.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                        }
+                        else {
+                            alert.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                        }
+                    }
+
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
                     }
                 });
-                alertBuilder.setTitle("Congratulations!");
-                alertBuilder.setMessage("Sprint Time: " +
-                        numInSeconds / 60 + " minutes " + numInSeconds % 60 + " seconds\n" +
-                        "Unfocused Time: " + mUnfocusedTime+ " seconds");
-                AlertDialog alert = alertBuilder.create();
                 alert.show();
-
+                alert.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
             }
         };
         mTimer.start();
