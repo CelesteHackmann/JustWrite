@@ -24,6 +24,7 @@ public class Countdown extends AppCompatActivity {
     int mUnfocusedTime = -1;
     private final String FORMAT = "%02d:%02d";
     private boolean mTimerGoing = false;
+    private boolean mPopupView = false;
     AlertDialog alert;
 
     @Override
@@ -44,7 +45,7 @@ public class Countdown extends AppCompatActivity {
         mTimer = new CountDownTimer(numInSeconds *1000, 1000) {
             @Override
             public void onTick ( long millisUntilFinished){
-                if (!hasWindowFocus() && !myKM.isDeviceLocked()) {
+                if (!hasWindowFocus() && !myKM.isDeviceLocked() && !mPopupView) {
                     mUnfocusedTime++;
                     Log.d("time", String.valueOf(mUnfocusedTime));
                 }
@@ -111,10 +112,25 @@ public class Countdown extends AppCompatActivity {
 
     public void endSprint(View view) {
         if (mTimerGoing) {
-            mTimer.cancel();
-            mTimerGoing = false;
+            AlertDialog alert = new AlertDialog.Builder(Countdown.this).setTitle("End Sprint")
+                    .setMessage("Are you sure you want to end the sprint?\nYour progress will not be counted.")
+                    .setPositiveButton("End Sprint", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mTimer.cancel();
+                            mTimerGoing = false;
+                            finish();
+                        }
+                    })
+                    .setNegativeButton("Continue Sprint", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).create();
+            alert.show();
+            mPopupView = true;
         }
-        finish();
     }
 
     @Override

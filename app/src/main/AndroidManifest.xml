@@ -11,8 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SprintHistory"
-            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".SprintHistory" />
         <activity android:name=".CreateProject"
             android:parentActivityName=".MainActivity"/>
         <activity android:name=".Countdown" />

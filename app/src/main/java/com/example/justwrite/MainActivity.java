@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int RESULT_SPRINT_OVER = 2;
     private Project defaultProject = new Project("Select a Project", "Undefined");
 
-    boolean TESTING_ON = true;
+    boolean TESTING_ON = false;
 
 
     @Override
@@ -90,8 +90,6 @@ public class MainActivity extends AppCompatActivity {
                 arrayAdapter.notifyDataSetChanged();
                 currentProjectPosition = arrayAdapter.getPosition(project);
                 mSpinnerProjects.setSelection(currentProjectPosition);
-                Toast toast = Toast.makeText(this, project.toString(), Toast.LENGTH_SHORT);
-                toast.show();
             }
             if (requestCode == RESULT_SPRINT_OVER) {
                 int sprintTime = data.getIntExtra("sprint time", 0);
