@@ -23,9 +23,11 @@ public class Countdown extends AppCompatActivity {
     KeyguardManager myKM;
     int mUnfocusedTime = -1;
     private final String FORMAT = "%02d:%02d";
-    private boolean mTimerGoing = false;
     private boolean mPopupView = false;
     AlertDialog alert;
+    long remainingSeconds;
+    int secondsLeft;
+    int minutesLeft;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,15 +51,14 @@ public class Countdown extends AppCompatActivity {
                     mUnfocusedTime++;
                     Log.d("time", String.valueOf(mUnfocusedTime));
                 }
-                long remainingSeconds = millisUntilFinished / 1000;
-                int minutesLeft = (int) (remainingSeconds / 60);
-                int secondsLeft = (int) (remainingSeconds % 60);
+                remainingSeconds = millisUntilFinished / 1000;
+                minutesLeft = (int) (remainingSeconds / 60);
+                secondsLeft = (int) (remainingSeconds % 60);
                 mTimerText.setText(String.format(FORMAT, minutesLeft, secondsLeft));
             }
 
             @Override
             public void onFinish () {
-                mTimerGoing = false;
                 LayoutInflater inflater = LayoutInflater.from(Countdown.this);
                 final View layout = inflater.inflate(R.layout.sprint_finished, null);
                 final EditText wordsWrittenText = (EditText) layout.findViewById(R.id.editTextNumber);
@@ -107,30 +108,27 @@ public class Countdown extends AppCompatActivity {
             }
         };
         mTimer.start();
-        mTimerGoing = true;
     }
 
     public void endSprint(View view) {
-        if (mTimerGoing) {
-            AlertDialog alert = new AlertDialog.Builder(Countdown.this).setTitle("End Sprint")
-                    .setMessage("Are you sure you want to end the sprint?\nYour progress will not be counted.")
-                    .setPositiveButton("End Sprint", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            mTimer.cancel();
-                            mTimerGoing = false;
-                            finish();
-                        }
-                    })
-                    .setNegativeButton("Continue Sprint", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }).create();
-            alert.show();
-            mPopupView = true;
-        }
+        AlertDialog alert = new AlertDialog.Builder(Countdown.this).setTitle("End Sprint")
+                .setMessage("Are you sure you want to end the sprint?\nYour progress will not be counted.")
+                .setPositiveButton("End Sprint", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mTimer.cancel();
+                        mPopupView = false;
+                        finish();
+                    }
+                })
+                .setNegativeButton("Continue Sprint", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mPopupView = false;
+                    }
+                }).create();
+        alert.show();
+        mPopupView = true;
     }
 
     @Override
