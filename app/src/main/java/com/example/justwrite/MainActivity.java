@@ -3,11 +3,8 @@ package com.example.justwrite;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -18,7 +15,6 @@ import android.widget.Spinner;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
     NumberPicker mMinuteText;
@@ -31,8 +27,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int RESULT_SPRINT_OVER = 2;
     private Project defaultProject = new Project("Select a Project", "Undefined");
 
-    boolean TESTING_ON = false;
-    HashMap<Project, Long> projectToId = new HashMap();
     private DatabaseHelper mDB;
     private SQLiteDatabase mWriteableDatabase;
     private long currentProjectId;
@@ -47,11 +41,6 @@ public class MainActivity extends AppCompatActivity {
         setupNumberPickers();
 
         projects.add(defaultProject);
-        projectToId.put(defaultProject, null);
-
-        if (TESTING_ON) {
-            setUpForTesting();
-        }
 
         arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, projects);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -101,27 +90,17 @@ public class MainActivity extends AppCompatActivity {
                 String pGenre = data.getStringExtra("genre");
 
                 // Add Project to Database
-                ContentValues projectValues = new ContentValues();
-                projectValues.put(DatabaseHelper.KEY_TITLE, pName);
-                projectValues.put(DatabaseHelper.KEY_GENRE, pGenre);
-                long newRowId = mWriteableDatabase.insert(DatabaseHelper.PROJECTS_TABLE, null, projectValues);
+                currentProjectId = mDB.insertProject(pName, pGenre);;
+                // Set Up Project Stats for new Project
+                mDB.insertProjectStats(currentProjectId);
 
-                currentProjectId = newRowId;
-
-                // Update Listing in Spinner
-                Project project = new Project(pName, pGenre, newRowId);
+                // Create project for spinner
+                Project project = new Project(pName, pGenre, currentProjectId);
                 projects.add(project);
                 arrayAdapter.notifyDataSetChanged();
                 currentProjectPosition = arrayAdapter.getPosition(project);
                 mSpinnerProjects.setSelection(currentProjectPosition);
-                
-                // Set Up Project Stats
-                ContentValues statsValues = new ContentValues();
-                statsValues.put(DatabaseHelper.KEY_PROJECT_ID, newRowId);
-                statsValues.put(DatabaseHelper.KEY_TOTAL_TIME, 0);
-                statsValues.put(DatabaseHelper.KEY_TOTAL_WORDS, 0);
-                statsValues.put(DatabaseHelper.KEY_TOTAL_UNFOCUSED_TIME, 0);
-                mWriteableDatabase.insert(DatabaseHelper.PROJECTS_STATS_TABLE, null, statsValues);
+
             }
             if (requestCode == RESULT_SPRINT_OVER) {
                 int sprintTime = data.getIntExtra("sprint time", 0);
@@ -130,28 +109,13 @@ public class MainActivity extends AppCompatActivity {
                 Sprint sprint = new Sprint(sprintTime, unfocusedTime, wordCount);
                 projects.get(currentProjectPosition).addSprint(sprint);
 
-                ContentValues sprintValues = new ContentValues();
-                sprintValues.put(DatabaseHelper.KEY_SPRINT_TIME, sprintTime);
-                sprintValues.put(DatabaseHelper.KEY_WORD_COUNT, wordCount);
-                sprintValues.put(DatabaseHelper.KEY_UNFOCUSED_TIME, unfocusedTime);
-                sprintValues.put(DatabaseHelper.KEY_PROJECT_ID, currentProjectId);
-                mWriteableDatabase.insert(DatabaseHelper.SPRINTS_TABLE, null, sprintValues);
-                // UPDATE PROJECT STATS
-                int newWordCount = wordCount + mDB.getTotalWordCount(currentProjectId);
-                int newTotalTime = sprintTime + mDB.getTotalTime(currentProjectId);
-                int newTotalUnfocusedTime = unfocusedTime + mDB.getTotalUnfocusedTime(currentProjectId);
-
-                ContentValues statsValues = new ContentValues();
-                statsValues.put(DatabaseHelper.KEY_TOTAL_WORDS, newWordCount);
-                statsValues.put(DatabaseHelper.KEY_TOTAL_TIME, newTotalTime);
-                statsValues.put(DatabaseHelper.KEY_TOTAL_UNFOCUSED_TIME, newTotalUnfocusedTime);
-
-                String selection = DatabaseHelper.KEY_PROJECT_ID + " LIKE ?";
-                String[] selectionArgs = {String.valueOf(currentProjectId)};
-                mWriteableDatabase.update(DatabaseHelper.PROJECTS_STATS_TABLE, statsValues, selection, selectionArgs);
+                //Add Sprint and Project Stats Tables
+                mDB.addSprint(sprintTime, unfocusedTime, wordCount, currentProjectId);
+                mDB.updateProjectStats(sprintTime, unfocusedTime, wordCount, currentProjectId);
             }
         }
     }
+
 
     public void seeSprintLog(View view) {
         Intent intent = new Intent(this, SprintHistory.class);
@@ -171,17 +135,6 @@ public class MainActivity extends AppCompatActivity {
                 return String.format("%02d", i);
             }
         });
-    }
-
-    private void setUpForTesting() {
-        Project testP1 = new Project("Breaking Trust", "Young Adult");
-        Project testP2 = new Project("Start of Everything New", "Contemporary");
-        testP1.addSprint(new Sprint(120,0, 120));
-        testP1.addSprint(new Sprint(1800, 54, 564));
-        testP2.addSprint(new Sprint(320, 24, 300));
-        testP2.addSprint(new Sprint(1200, 67, 153));
-        projects.add(testP1);
-        projects.add(testP2);
     }
 
     private void hideKeyboard() {

@@ -12,8 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".SprintHistory" />
-        <activity android:name=".CreateProject"
-            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".CreateProject" />
         <activity android:name=".Countdown" />
         <activity android:name=".MainActivity">
             <intent-filter>

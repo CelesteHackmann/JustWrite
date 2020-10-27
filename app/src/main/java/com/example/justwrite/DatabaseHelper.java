@@ -1,5 +1,6 @@
 package com.example.justwrite;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -7,9 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    // It's a good idea to always define a log tag like this.
-    private static final String TAG = "DATABASE_HELPER";
-
     // has to be 1 first time or app will crash
     private static final int DATABASE_VERSION = 1;
     public static final String PROJECTS_TABLE = "PROJECTS";
@@ -19,7 +17,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Common Column Names
     public static final String KEY_ID = "id";
-    public static final String KEY_CREATED_AT = "created_at";
     public static final String KEY_PROJECT_ID = "project_id";
 
     // PROJECTS Table Column Names
@@ -54,7 +51,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
-
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -122,13 +118,47 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return 0;
     }
 
-//    public Long getProjectIdFrom(String title) {
-//        String[] projection = {DatabaseHelper.KEY_PROJECT_ID, DatabaseHelper.KEY_TITLE};
-//        String selection = DatabaseHelper.KEY_TITLE + " = ?";
-//        String[] selectionArgs = {selected.getTitle()};
-//        Cursor cursor = mReadableDatabase.query(DatabaseHelper.PROJECTS_TABLE, projection, selection, selectionArgs, null, null, null);
-//        cursor.moveToNext();
-//        Long projectId = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.KEY_PROJECT_ID));
-//        cursor.close();
-//    }
+    public long insertProject(String pName, String pGenre) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues projectValues = new ContentValues();
+        projectValues.put(KEY_TITLE, pName);
+        projectValues.put(KEY_GENRE, pGenre);
+        return db.insert(PROJECTS_TABLE, null, projectValues);
+    }
+
+    public void insertProjectStats(long currentProjectId) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues statsValues = new ContentValues();
+        statsValues.put(KEY_PROJECT_ID, currentProjectId);
+        statsValues.put(KEY_TOTAL_TIME, 0);
+        statsValues.put(KEY_TOTAL_WORDS, 0);
+        statsValues.put(KEY_TOTAL_UNFOCUSED_TIME, 0);
+        db.insert(PROJECTS_STATS_TABLE, null, statsValues);
+    }
+
+    public void addSprint(int sprintTime, int unfocusedTime, int wordCount, long currentProjectId) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues sprintValues = new ContentValues();
+        sprintValues.put(KEY_SPRINT_TIME, sprintTime);
+        sprintValues.put(KEY_WORD_COUNT, wordCount);
+        sprintValues.put(KEY_UNFOCUSED_TIME, unfocusedTime);
+        sprintValues.put(KEY_PROJECT_ID, currentProjectId);
+        db.insert(SPRINTS_TABLE, null, sprintValues);
+    }
+
+    public void updateProjectStats(int sprintTime, int unfocusedTime, int wordCount, long currentProjectId) {
+        SQLiteDatabase db = getWritableDatabase();
+        int newWordCount = wordCount + getTotalWordCount(currentProjectId);
+        int newTotalTime = sprintTime + getTotalTime(currentProjectId);
+        int newTotalUnfocusedTime = unfocusedTime + getTotalUnfocusedTime(currentProjectId);
+
+        ContentValues statsValues = new ContentValues();
+        statsValues.put(KEY_TOTAL_WORDS, newWordCount);
+        statsValues.put(KEY_TOTAL_TIME, newTotalTime);
+        statsValues.put(KEY_TOTAL_UNFOCUSED_TIME, newTotalUnfocusedTime);
+
+        String selection = KEY_PROJECT_ID + " LIKE ?";
+        String[] selectionArgs = {String.valueOf(currentProjectId)};
+        db.update(PROJECTS_STATS_TABLE, statsValues, selection, selectionArgs);
+    }
 }
