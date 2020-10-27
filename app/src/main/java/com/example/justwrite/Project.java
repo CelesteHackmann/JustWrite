@@ -8,11 +8,18 @@ import java.util.ArrayList;
 public class Project implements Parcelable {
     String mTitle;
     String mGenre;
+    long mProjectId;
     ArrayList<Sprint> mSprints = new ArrayList<>();
 
     public Project(String name, String genre) {
         mTitle = name;
         mGenre = genre;
+    }
+
+    public Project(String name, String genre, long id) {
+        mTitle = name;
+        mGenre = genre;
+        mProjectId = id;
     }
 
     protected Project(Parcel in) {
@@ -66,4 +73,7 @@ public class Project implements Parcelable {
         mSprints.add(sprint);
     }
 
+    public long getId() {
+        return mProjectId;
+    }
 }
