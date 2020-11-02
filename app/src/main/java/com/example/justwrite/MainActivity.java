@@ -1,13 +1,19 @@
 package com.example.justwrite;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 
@@ -73,29 +79,50 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void createProject(View view) {
-        Intent intent = new Intent(getApplicationContext(), CreateProject.class);
-        startActivityForResult(intent, 1);
+        LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
+        final View layout = inflater.inflate(R.layout.create_project_dialog, null);
+        final EditText projectName = (EditText) layout.findViewById(R.id.editProjectName);
+        final EditText projectGenre = (EditText) layout.findViewById(R.id.editGenre);
+
+        final AlertDialog alert = new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Create a New Project")
+                .setView(layout)
+                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String titleString = projectName.getText().toString();
+                        String genreString = projectGenre.getText().toString();
+                        addProject(titleString, genreString);
+                    }
+                })
+                .setCancelable(true)
+                .create();
+        projectName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > 0) {
+                    alert.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                }
+                else {
+                    alert.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        alert.show();
+        alert.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK) {
-            if (requestCode == RESULT_CREATE_PROJECT) {
-                String pName = data.getStringExtra("name");
-                String pGenre = data.getStringExtra("genre");
-
-                // Add Project to Database
-                currentProjectId = mDB.insertProject(pName, pGenre);;
-                // Set Up Project Stats for new Project
-                mDB.insertProjectStats(currentProjectId);
-
-                // Create project for spinner
-                Project project = new Project(pName, pGenre, currentProjectId);
-                projectAndIds.add(project);
-                arrayAdapter.notifyDataSetChanged();
-                mSpinnerProjects.setSelection(arrayAdapter.getPosition(project));
-
-            }
             if (requestCode == RESULT_SPRINT_OVER) {
                 //Add Sprint and Project Stats Tables
                 int sprintTime = data.getIntExtra("sprint time", 0);
@@ -105,6 +132,20 @@ public class MainActivity extends AppCompatActivity {
                 mDB.updateProjectStats(sprintTime, unfocusedTime, wordCount, currentProjectId);
             }
         }
+    }
+
+    private void addProject(String pName, String pGenre) {
+        // Add Project to Database
+        currentProjectId = mDB.insertProject(pName, pGenre);
+
+        // Set Up Project Stats for new Project
+        mDB.insertProjectStats(currentProjectId);
+
+        // Create project for spinner
+        Project project = new Project(pName, pGenre, currentProjectId);
+        projectAndIds.add(project);
+        arrayAdapter.notifyDataSetChanged();
+        mSpinnerProjects.setSelection(arrayAdapter.getPosition(project));
     }
 
     public void seeSprintLog(View view) {
@@ -126,8 +167,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupNumberPickers() {
         mMinuteText.setMinValue(0);
-        mSecondText.setMinValue(0);
         mMinuteText.setMaxValue(59);
+        mSecondText.setMinValue(0);
         mSecondText.setMaxValue(59);
         mMinuteText.setValue(15);
         mSecondText.setFormatter(new NumberPicker.Formatter() {
