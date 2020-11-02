@@ -1,9 +1,8 @@
 package com.example.justwrite;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -21,14 +20,12 @@ public class MainActivity extends AppCompatActivity {
     NumberPicker mSecondText;
     Spinner mSpinnerProjects;
     ArrayAdapter<Project> arrayAdapter;
-    ArrayList<Project> projects = new ArrayList<>();
-    int currentProjectPosition = 0;
+    ArrayList<Project> projectAndIds = new ArrayList<>();
     private static final int RESULT_CREATE_PROJECT = 1;
     private static final int RESULT_SPRINT_OVER = 2;
-    private Project defaultProject = new Project("Select a Project", "Undefined");
+    private Project defaultProjectAndId = new Project("Select a Project","Undefined", -1);
 
     private DatabaseHelper mDB;
-    private SQLiteDatabase mWriteableDatabase;
     private long currentProjectId;
 
     @Override
@@ -40,17 +37,17 @@ public class MainActivity extends AppCompatActivity {
         mSpinnerProjects = findViewById(R.id.spinnerProjects);
         setupNumberPickers();
 
-        projects.add(defaultProject);
+        mDB = DatabaseHelper.getInstance(this);
+        setUpProjectSpinner();
 
-        arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, projects);
+        arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, projectAndIds);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         mSpinnerProjects.setAdapter(arrayAdapter);
         mSpinnerProjects.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                currentProjectPosition = position;
-                Project selected = projects.get(position);
+                Project selected = projectAndIds.get(position);
                 currentProjectId = selected.getId();
             }
             @Override
@@ -58,13 +55,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mDB = new DatabaseHelper(this);
-        mWriteableDatabase = mDB.getWritableDatabase();
     }
 
     public void startSprint(View view) {
         hideKeyboard();
-        if (mSpinnerProjects.getSelectedItem() == defaultProject) {
+        if (mSpinnerProjects.getSelectedItem() == defaultProjectAndId) {
             mSpinnerProjects.getSelectedView().setBackgroundResource(R.color.warningColor);
         }
         else {
@@ -96,31 +91,37 @@ public class MainActivity extends AppCompatActivity {
 
                 // Create project for spinner
                 Project project = new Project(pName, pGenre, currentProjectId);
-                projects.add(project);
+                projectAndIds.add(project);
                 arrayAdapter.notifyDataSetChanged();
-                currentProjectPosition = arrayAdapter.getPosition(project);
-                mSpinnerProjects.setSelection(currentProjectPosition);
+                mSpinnerProjects.setSelection(arrayAdapter.getPosition(project));
 
             }
             if (requestCode == RESULT_SPRINT_OVER) {
+                //Add Sprint and Project Stats Tables
                 int sprintTime = data.getIntExtra("sprint time", 0);
                 int unfocusedTime = data.getIntExtra("unfocused time", 0);
                 int wordCount = data.getIntExtra("words written", 0);
-                Sprint sprint = new Sprint(sprintTime, unfocusedTime, wordCount);
-                projects.get(currentProjectPosition).addSprint(sprint);
-
-                //Add Sprint and Project Stats Tables
                 mDB.addSprint(sprintTime, unfocusedTime, wordCount, currentProjectId);
                 mDB.updateProjectStats(sprintTime, unfocusedTime, wordCount, currentProjectId);
             }
         }
     }
 
-
     public void seeSprintLog(View view) {
         Intent intent = new Intent(this, SprintHistory.class);
-        intent.putExtra("projects", projects);
+        intent.putExtra("projects", projectAndIds);
         startActivity(intent);
+    }
+
+    private void setUpProjectSpinner() {
+        projectAndIds.add(defaultProjectAndId);
+        Cursor cursor = mDB.getReadableDatabase().query(DatabaseHelper.PROJECTS_TABLE,
+                null,null, null, null, null, null);
+        while (cursor.moveToNext()) {
+            projectAndIds.add(new Project(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_TITLE)),
+                    cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_GENRE)),
+                    cursor.getLong(cursor.getColumnIndex(DatabaseHelper.KEY_PROJECT_ID))));
+        }
     }
 
     private void setupNumberPickers() {

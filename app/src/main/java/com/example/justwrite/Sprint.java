@@ -46,8 +46,16 @@ public class Sprint implements Parcelable {
 
     @Override
     public String toString() {
-        return "SprintTimeSeconds=" + mSprintTimeSeconds +
-                "\nUnfocusedSeconds=" + mUnfocusedSeconds;
+        int minutes = mSprintTimeSeconds/60;
+        int seconds = mSprintTimeSeconds%60;
+        int unfocusedMinutes = mUnfocusedSeconds/60;
+        int unfocusedSeconds = mUnfocusedSeconds%60;
+        String minuteString = String.format("%02d", minutes);
+        String secondString = String.format("%02d", seconds);
+        String unfocusedMinuteString = String.format("%02d", unfocusedMinutes);
+        String unfocusedSecondString = String.format("%02d", unfocusedSeconds);
+        return "Sprint Time - " + minuteString + ":" + secondString +
+                "\nUnfocused Time - " + unfocusedMinuteString + ":" + unfocusedSecondString;
     }
 
     public int getmWordCount() {
