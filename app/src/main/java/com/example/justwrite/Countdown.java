@@ -26,7 +26,7 @@ public class Countdown extends AppCompatActivity {
     TextView mTimerText;
     CountDownTimer mTimer;
     KeyguardManager myKM;
-    int mUnfocusedTime = -1;
+    int mUnfocusedTime = 0;
     private boolean appInFocus = true;
     AlertDialog alert;
     long remainingSeconds;
@@ -36,6 +36,7 @@ public class Countdown extends AppCompatActivity {
     private NotificationManager mNotifyManager;
     private static final String CHANNEL_ID = "notification_channel";
     private static final int RETURN_TO_APP_NOTIFICATION_ID = 0;
+    private static final int SPRINT_FINISHED_NOTIFICATION_ID = 1;
     private boolean notificationDisplayed;
 
     @Override
@@ -70,6 +71,7 @@ public class Countdown extends AppCompatActivity {
 
             @Override
             public void onFinish () {
+                displayTimerFinishedNotification();
                 LayoutInflater inflater = LayoutInflater.from(Countdown.this);
                 final View layout = inflater.inflate(R.layout.sprint_finished, null);
                 final EditText wordsWrittenText = (EditText) layout.findViewById(R.id.editTextNumber);
@@ -119,6 +121,7 @@ public class Countdown extends AppCompatActivity {
                         intent.putExtra("unfocused time", mUnfocusedTime);
                         intent.putExtra("words written", wordCount);
                         setResult(RESULT_OK, intent);
+                        mNotifyManager.cancelAll();
                         finish();
                     }
                 })
@@ -135,6 +138,7 @@ public class Countdown extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mTimer.cancel();
+                        mNotifyManager.cancelAll();
                         finish();
                     }
                 })
@@ -152,13 +156,20 @@ public class Countdown extends AppCompatActivity {
         mTimerText.setText(String.format(FORMAT, minutesLeft, secondsLeft));
     }
 
+    private void displayTimerFinishedNotification() {
+        PendingIntent notificationPendingIntent = getReturnToAppIntent(SPRINT_FINISHED_NOTIFICATION_ID);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setContentTitle("SPRINT FINISHED")
+                .setContentText("Your sprint is finished.")
+                .setSmallIcon(R.drawable.ic_notification_image)
+                .setContentIntent(notificationPendingIntent)
+                .setAutoCancel(true);
+        mNotifyManager.notify(SPRINT_FINISHED_NOTIFICATION_ID, builder.build());
+    }
+
     private void displayReturnToAppNotification() {
-        Log.d("APP_NOTIFICATION", "display notification");
         notificationDisplayed = true;
-        Intent returnToAppIntent = new Intent(this, Countdown.class);
-        returnToAppIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent notificationPendingIntent = PendingIntent.getActivity(this,
-                RETURN_TO_APP_NOTIFICATION_ID, returnToAppIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent notificationPendingIntent = getReturnToAppIntent(RETURN_TO_APP_NOTIFICATION_ID);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("RETURN TO APP")
                 .setContentText("Your time is currently unfocused")
@@ -178,6 +189,13 @@ public class Countdown extends AppCompatActivity {
             notificationChannel.setDescription("Notification From Just Write");
             mNotifyManager.createNotificationChannel(notificationChannel);
         }
+    }
+
+    private PendingIntent getReturnToAppIntent(int sprintFinishedNotificationId) {
+        Intent returnToAppIntent = new Intent(this, Countdown.class);
+        returnToAppIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        return PendingIntent.getActivity(this,
+                sprintFinishedNotificationId, returnToAppIntent, PendingIntent.FLAG_CANCEL_CURRENT);
     }
 
     @Override
@@ -200,6 +218,7 @@ public class Countdown extends AppCompatActivity {
         super.onResume();
         appInFocus = true;
         notificationDisplayed = false;
+        mNotifyManager.cancelAll();
         Log.d("APP_FOCUS", "true");
     }
 
