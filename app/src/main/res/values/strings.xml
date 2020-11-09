@@ -5,4 +5,5 @@
     <string name="seconds_text">seconds</string>
     <string name="minutes_text">minutes</string>
     <string name="colon">:</string>
+    <string name="cancelSprintMessage">Are you sure you want to end the sprint?\nYour progress will not be counted.</string>
 </resources>

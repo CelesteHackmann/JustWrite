@@ -22,12 +22,12 @@ public class Countdown extends AppCompatActivity {
     CountDownTimer mTimer;
     KeyguardManager myKM;
     int mUnfocusedTime = -1;
-    private final String FORMAT = "%02d:%02d";
-    private boolean mPopupShown = false;
+    private boolean appInFocus = true;
     AlertDialog alert;
     long remainingSeconds;
     int secondsLeft;
     int minutesLeft;
+    private final String FORMAT = "%02d:%02d";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +35,7 @@ public class Countdown extends AppCompatActivity {
         setContentView(R.layout.activity_countdown);
         mTimerText = findViewById(R.id.countdownText);
         myKM = (KeyguardManager) getApplicationContext().getSystemService(Context.KEYGUARD_SERVICE);
+
         Intent intent = getIntent();
         int minutes = intent.getIntExtra("minutes",0);
         int seconds = intent.getIntExtra("seconds", 0);
@@ -43,18 +44,14 @@ public class Countdown extends AppCompatActivity {
 
     private void startTimer(int minutes, int seconds) {
         final int numInSeconds = minutes * 60 + seconds;
-
         mTimer = new CountDownTimer(numInSeconds *1000, 1000) {
             @Override
             public void onTick ( long millisUntilFinished){
-                if (appNotInFocus()) {
+                if (!appInFocus && !myKM.isDeviceLocked()) {
                     mUnfocusedTime++;
-                    Log.d("time", String.valueOf(mUnfocusedTime));
+                    Log.d("UnfocusedTime", String.valueOf(mUnfocusedTime));
                 }
-                remainingSeconds = millisUntilFinished / 1000;
-                minutesLeft = (int) (remainingSeconds / 60);
-                secondsLeft = (int) (remainingSeconds % 60);
-                mTimerText.setText(String.format(FORMAT, minutesLeft, secondsLeft));
+                updateTimerText(millisUntilFinished);
             }
 
             @Override
@@ -62,8 +59,8 @@ public class Countdown extends AppCompatActivity {
                 LayoutInflater inflater = LayoutInflater.from(Countdown.this);
                 final View layout = inflater.inflate(R.layout.sprint_finished, null);
                 final EditText wordsWrittenText = (EditText) layout.findViewById(R.id.editTextNumber);
+                alert = getFinishedAlert(layout, wordsWrittenText, numInSeconds);
 
-                alert = getAlert(layout, wordsWrittenText, numInSeconds);
                 wordsWrittenText.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -90,9 +87,13 @@ public class Countdown extends AppCompatActivity {
         mTimer.start();
     }
 
-    private AlertDialog getAlert(View layout, final EditText wordsWrittenText, final int numInSeconds) {
-        return new AlertDialog.Builder(Countdown.this)
-                .setTitle("Congratulations")
+    public void cancelSprint(View view) {
+        AlertDialog alert = getCancelAlert();
+        alert.show();
+    }
+
+    private AlertDialog getFinishedAlert(View layout, final EditText wordsWrittenText, final int numInSeconds) {
+        return new AlertDialog.Builder(Countdown.this).setTitle("Congratulations")
                 .setView(layout)
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
@@ -107,39 +108,51 @@ public class Countdown extends AppCompatActivity {
                         finish();
                     }
                 })
-                .setMessage("Sprint Time: " +
-                numInSeconds / 60 + " minutes " + numInSeconds % 60 + " seconds\n" +
-                "Unfocused Time: " + mUnfocusedTime+ " seconds")
+                .setMessage("Sprint Time: " + numInSeconds / 60 + " minutes " + numInSeconds % 60 +
+                        " seconds\n" + "Unfocused Time: " + mUnfocusedTime+ " seconds")
                 .setCancelable(false)
                 .create();
     }
 
-    public void endSprint(View view) {
-        AlertDialog alert = new AlertDialog.Builder(Countdown.this).setTitle("End Sprint")
-                .setMessage("Are you sure you want to end the sprint?\nYour progress will not be counted.")
+    private AlertDialog getCancelAlert() {
+        return new AlertDialog.Builder(Countdown.this).setTitle("End Sprint")
+                .setMessage(R.string.cancelSprintMessage)
                 .setPositiveButton("End Sprint", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mTimer.cancel();
-                        mPopupShown = false;
                         finish();
                     }
                 })
                 .setNegativeButton("Continue Sprint", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mPopupShown = false;
                     }
                 }).create();
-        alert.show();
-        mPopupShown = true;
+    }
+
+    private void updateTimerText(long millisUntilFinished) {
+        remainingSeconds = millisUntilFinished / 1000;
+        minutesLeft = (int) (remainingSeconds / 60);
+        secondsLeft = (int) (remainingSeconds % 60);
+        mTimerText.setText(String.format(FORMAT, minutesLeft, secondsLeft));
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        appInFocus = false;
+        Log.d("APP_FOCUS", "false");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        appInFocus = true;
+        Log.d("APP_FOCUS", "true");
     }
 
     @Override
     public void onBackPressed() {
-    }
-
-    private boolean appNotInFocus() {
-        return !hasWindowFocus() && !myKM.isDeviceLocked() && !mPopupShown;
     }
 }
