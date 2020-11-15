@@ -58,8 +58,15 @@ public class Sprint implements Parcelable {
                 "\nUnfocused Time - " + unfocusedMinuteString + ":" + unfocusedSecondString;
     }
 
-    public int getmWordCount() {
+    public int getWordCount() {
         return mWordCount;
     }
 
+    public int getUnfocusedSeconds() {
+        return mUnfocusedSeconds;
+    }
+
+    public int getSprintTimeSeconds() {
+        return mSprintTimeSeconds;
+    }
 }

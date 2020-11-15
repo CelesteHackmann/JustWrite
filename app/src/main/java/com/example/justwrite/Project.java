@@ -60,4 +60,12 @@ public class Project implements Parcelable {
     public long getId() {
         return mProjectId;
     }
+
+    public void setTitle(String newTitle) {
+        mTitle = newTitle;
+    }
+
+    public void setGenre(String newGenre) {
+        mGenre = newGenre;
+    }
 }

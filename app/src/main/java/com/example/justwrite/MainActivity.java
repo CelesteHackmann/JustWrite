@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
     Spinner mSpinnerProjects;
     ArrayAdapter<Project> arrayAdapter;
     ArrayList<Project> projectAndIds = new ArrayList<>();
-    private static final int RESULT_CREATE_PROJECT = 1;
     private static final int RESULT_SPRINT_OVER = 2;
     private Project defaultProjectAndId = new Project("Select a Project","Undefined", -1);
 
@@ -134,6 +133,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void seeSprintLog(View view) {
+        Intent intent = new Intent(this, SprintHistory.class);
+        intent.putExtra("projects", projectAndIds);
+        startActivity(intent);
+    }
+
     private void addProject(String pName, String pGenre) {
         // Add Project to Database
         currentProjectId = mDB.insertProject(pName, pGenre);
@@ -141,17 +146,11 @@ public class MainActivity extends AppCompatActivity {
         // Set Up Project Stats for new Project
         mDB.insertProjectStats(currentProjectId);
 
-        // Create project for spinner
         Project project = new Project(pName, pGenre, currentProjectId);
+        // Create project for spinner
         projectAndIds.add(project);
         arrayAdapter.notifyDataSetChanged();
         mSpinnerProjects.setSelection(arrayAdapter.getPosition(project));
-    }
-
-    public void seeSprintLog(View view) {
-        Intent intent = new Intent(this, SprintHistory.class);
-        intent.putExtra("projects", projectAndIds);
-        startActivity(intent);
     }
 
     private void setUpProjectSpinner() {
