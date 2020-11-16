@@ -1,6 +1,5 @@
 package com.example.justwrite;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
@@ -28,8 +27,7 @@ public class SprintHistory extends AppCompatActivity {
         setContentView(R.layout.activity_history_and_analytics);
         mDB = DatabaseHelper.getInstance(this);
 
-        Intent intent = getIntent();
-        ArrayList<Project> projects = intent.getParcelableArrayListExtra("projects");
+        ArrayList<Project> projects = mDB.getProjectList();
         if (projects != null) {
             ArrayAdapter<Project> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, projects);
             arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

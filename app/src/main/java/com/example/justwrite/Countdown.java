@@ -210,7 +210,7 @@ public class Countdown extends AppCompatActivity {
                     Log.d("APP_FOCUS", "false");
                 }
             }
-        }, 1000);
+        }, 5000);
     }
 
     @Override

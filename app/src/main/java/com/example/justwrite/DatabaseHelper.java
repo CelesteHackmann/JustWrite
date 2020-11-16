@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static DatabaseHelper sInstance;
     // has to be 1 first time or app will crash
@@ -124,6 +126,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return unfocusedTime;
         }
         return 0;
+    }
+
+    public ArrayList<Project> getProjectList() {
+        ArrayList<Project> projects = new ArrayList<>();
+        Cursor result = getReadableDatabase().query(
+                PROJECTS_TABLE,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+        while (result.moveToNext()) {
+            projects.add(new Project(result.getString(result.getColumnIndex(KEY_TITLE)),
+                    result.getString(result.getColumnIndex(KEY_GENRE)),
+                    result.getLong(result.getColumnIndex(KEY_PROJECT_ID))));
+        }
+        return projects;
     }
 
     public long insertProject(String pName, String pGenre) {

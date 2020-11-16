@@ -1,9 +1,7 @@
 package com.example.justwrite;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -28,9 +26,7 @@ public class AnalyticsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_history_and_analytics);
         mDB = DatabaseHelper.getInstance(this);
 
-        Intent intent = getIntent();
-        // TODO GET SPRINT LIST FROM THE DATABASE
-        ArrayList<Project> projects = intent.getParcelableArrayListExtra("projects");
+        ArrayList<Project> projects = mDB.getProjectList();
         if (projects != null) {
             ArrayAdapter<Project> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, projects);
             arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -47,13 +43,11 @@ public class AnalyticsActivity extends AppCompatActivity {
                             DatabaseHelper.KEY_PROJECT_ID + "=?",
                             new String[] {String.valueOf(selectedProject.getId())},
                             null, null, null);
-                    Log.d("HELP_HERE", "LINE 50");
                     while (cursor.moveToNext()){
                         analyticsList.addLast(new Analytic("Total Words: ", cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_TOTAL_WORDS))));
-                        analyticsList.addLast(new Analytic("Total Time: ", cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_TOTAL_TIME))));
-                        analyticsList.addLast(new Analytic("Total Unfocused Time: ", cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_TOTAL_UNFOCUSED_TIME))));
+                        analyticsList.addLast(new Analytic("Total Time: ", cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_TOTAL_TIME)) + " seconds"));
+                        analyticsList.addLast(new Analytic("Total Unfocused Time: ", cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_TOTAL_UNFOCUSED_TIME)) + " seconds"));
                     }
-                    Log.d("HELP_HERE", "LINE 54");
                     mRecyclerView = findViewById(R.id.recyclerview);
                     mAdapter = new AnalyticListAdapter(getApplicationContext(), analyticsList);
                     mRecyclerView.setAdapter(mAdapter);

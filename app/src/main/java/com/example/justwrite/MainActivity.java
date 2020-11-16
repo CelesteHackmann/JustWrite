@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -80,8 +79,8 @@ public class MainActivity extends AppCompatActivity {
     public void createProject(View view) {
         LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
         final View layout = inflater.inflate(R.layout.create_project_dialog, null);
-        final EditText projectName = (EditText) layout.findViewById(R.id.editProjectName);
-        final EditText projectGenre = (EditText) layout.findViewById(R.id.editGenre);
+        final EditText projectName = layout.findViewById(R.id.editProjectName);
+        final EditText projectGenre = layout.findViewById(R.id.editGenre);
 
         final AlertDialog alert = new AlertDialog.Builder(MainActivity.this)
                 .setTitle("Create a New Project")
@@ -160,13 +159,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpProjectSpinner() {
-        projectAndIds.add(defaultProjectAndId);
-        Cursor cursor = mDB.getReadableDatabase().query(DatabaseHelper.PROJECTS_TABLE,
-                null,null, null, null, null, null);
-        while (cursor.moveToNext()) {
-            projectAndIds.add(new Project(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_TITLE)),
-                    cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_GENRE)),
-                    cursor.getLong(cursor.getColumnIndex(DatabaseHelper.KEY_PROJECT_ID))));
+        projectAndIds = mDB.getProjectList();
+        if (projectAndIds.size() == 0) {
+            projectAndIds.add(defaultProjectAndId);
         }
     }
 
