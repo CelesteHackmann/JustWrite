@@ -3,6 +3,7 @@ package com.example.justwrite;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,10 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class SprintHistory extends AppCompatActivity {
-
+public class AnalyticsActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
-    private SprintListAdapter mAdapter;
+    private AnalyticListAdapter mAdapter;
     private Spinner mSpinnerProjects;
     private DatabaseHelper mDB;
 
@@ -29,6 +29,7 @@ public class SprintHistory extends AppCompatActivity {
         mDB = DatabaseHelper.getInstance(this);
 
         Intent intent = getIntent();
+        // TODO GET SPRINT LIST FROM THE DATABASE
         ArrayList<Project> projects = intent.getParcelableArrayListExtra("projects");
         if (projects != null) {
             ArrayAdapter<Project> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, projects);
@@ -38,21 +39,23 @@ public class SprintHistory extends AppCompatActivity {
             mSpinnerProjects.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    // GET SPRINTS RELATED TO PROJECT
+                    // GET BASIC STATS FOR THAT PROJECT
                     Project selectedProject = (Project) mSpinnerProjects.getSelectedItem();
-                    LinkedList<Sprint> sprintList = new LinkedList<>();
-                    Cursor cursor = mDB.getReadableDatabase().query(DatabaseHelper.SPRINTS_TABLE,
+                    LinkedList<Analytic> analyticsList = new LinkedList<>();
+                    Cursor cursor = mDB.getReadableDatabase().query(DatabaseHelper.PROJECTS_STATS_TABLE,
                             null,
                             DatabaseHelper.KEY_PROJECT_ID + "=?",
                             new String[] {String.valueOf(selectedProject.getId())},
                             null, null, null);
-                    while (cursor.moveToNext()) {
-                        sprintList.addFirst(new Sprint(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_SPRINT_TIME)),
-                                cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_UNFOCUSED_TIME)),
-                                cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_WORD_COUNT))));
+                    Log.d("HELP_HERE", "LINE 50");
+                    while (cursor.moveToNext()){
+                        analyticsList.addLast(new Analytic("Total Words: ", cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_TOTAL_WORDS))));
+                        analyticsList.addLast(new Analytic("Total Time: ", cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_TOTAL_TIME))));
+                        analyticsList.addLast(new Analytic("Total Unfocused Time: ", cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_TOTAL_UNFOCUSED_TIME))));
                     }
+                    Log.d("HELP_HERE", "LINE 54");
                     mRecyclerView = findViewById(R.id.recyclerview);
-                    mAdapter = new SprintListAdapter(getApplicationContext(), sprintList);
+                    mAdapter = new AnalyticListAdapter(getApplicationContext(), analyticsList);
                     mRecyclerView.setAdapter(mAdapter);
                     mRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                 }

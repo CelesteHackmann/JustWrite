@@ -15,9 +15,9 @@ public class SprintListAdapter extends RecyclerView.Adapter<SprintListAdapter.Sp
     private LinkedList<Sprint> mSprintList;
     private LayoutInflater mInflater;
 
-    public SprintListAdapter(Context context, LinkedList<Sprint> recipeList) {
+    public SprintListAdapter(Context context, LinkedList<Sprint> sprintList) {
         mInflater = LayoutInflater.from(context);
-        this.mSprintList = recipeList;
+        this.mSprintList = sprintList;
     }
 
     @NonNull
@@ -48,7 +48,7 @@ public class SprintListAdapter extends RecyclerView.Adapter<SprintListAdapter.Sp
             super(itemView);
             sprintItemView = itemView.findViewById(R.id.sprint);
             this.mAdapter = adapter;
-            sprintWordCount = itemView.findViewById(R.id.projectName);
+            sprintWordCount = itemView.findViewById(R.id.sprintWordCount);
         }
     }
 }

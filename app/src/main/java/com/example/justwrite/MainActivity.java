@@ -139,6 +139,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void seeProjectAnalytics(View view) {
+        Intent intent = new Intent(this, AnalyticsActivity.class);
+        intent.putExtra("projects", projectAndIds);
+        startActivity(intent);
+    }
+
     private void addProject(String pName, String pGenre) {
         // Add Project to Database
         currentProjectId = mDB.insertProject(pName, pGenre);
