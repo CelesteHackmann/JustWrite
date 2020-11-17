@@ -13,5 +13,4 @@
     <string name="project_title_hint">Project Title</string>
     <string name="genre_hint">Genre</string>
     <string name="words_written_text">Words Written</string>
-    <string name="input_word_count_hint">Input Word Count</string>
 </resources>

@@ -9,11 +9,6 @@ public class Analytic {
         mData = data;
     }
 
-    public Analytic(String name, int data) {
-        mName = name;
-        mData = String.valueOf(data);
-    }
-
     public String getData() {
         return mData;
     }

@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/project_title_hint"
-        android:inputType="textPersonName"
+        android:inputType="textCapWords"
         android:paddingBottom="16dp" />
 
     <EditText
@@ -21,6 +21,6 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/genre_hint"
-        android:inputType="textPersonName" />
+        android:inputType="textCapWords" />
 
 </LinearLayout>

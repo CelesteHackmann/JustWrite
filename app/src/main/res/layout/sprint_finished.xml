@@ -20,8 +20,7 @@
             android:layout_weight="1"
             android:ems="5"
             android:inputType="number"
-            android:paddingStart="16dp"
-            android:hint="@string/input_word_count_hint"/>
+            android:paddingStart="16dp" />
 
         <TextView
             android:id="@+id/textView"
