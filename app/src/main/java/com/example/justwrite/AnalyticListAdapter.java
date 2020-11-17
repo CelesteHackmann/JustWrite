@@ -39,7 +39,7 @@ public class AnalyticListAdapter extends RecyclerView.Adapter<AnalyticListAdapte
         return mAnalyticList.size();
     }
 
-    public class AnalyticViewHolder extends RecyclerView.ViewHolder {
+    static class AnalyticViewHolder extends RecyclerView.ViewHolder {
         public final TextView analyticName;
         public final TextView analyticData;
         final AnalyticListAdapter mAdapter;

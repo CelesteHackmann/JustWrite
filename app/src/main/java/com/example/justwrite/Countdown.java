@@ -26,13 +26,13 @@ public class Countdown extends AppCompatActivity {
     TextView mTimerText;
     CountDownTimer mTimer;
     KeyguardManager myKM;
-    int mUnfocusedTime = 0;
     private boolean appInFocus = true;
+    int mUnfocusedTime = 0;
     AlertDialog alert;
     long remainingSeconds;
     int secondsLeft;
     int minutesLeft;
-    private final String FORMAT = "%02d:%02d";
+
     private NotificationManager mNotifyManager;
     private static final String CHANNEL_ID = "notification_channel";
     private static final int RETURN_TO_APP_NOTIFICATION_ID = 0;
@@ -64,7 +64,6 @@ public class Countdown extends AppCompatActivity {
                     if (!notificationDisplayed){
                         displayReturnToAppNotification();
                     }
-                    Log.d("APP_UNFOCUSED_TIME", String.valueOf(mUnfocusedTime));
                 }
                 updateTimerText(millisUntilFinished);
             }
@@ -74,7 +73,7 @@ public class Countdown extends AppCompatActivity {
                 displayTimerFinishedNotification();
                 LayoutInflater inflater = LayoutInflater.from(Countdown.this);
                 final View layout = inflater.inflate(R.layout.sprint_finished, null);
-                final EditText wordsWrittenText = (EditText) layout.findViewById(R.id.editTextNumber);
+                final EditText wordsWrittenText = layout.findViewById(R.id.editTextNumber);
                 alert = getFinishedAlert(layout, wordsWrittenText, numInSeconds);
 
                 wordsWrittenText.addTextChangedListener(new TextWatcher() {
@@ -153,6 +152,7 @@ public class Countdown extends AppCompatActivity {
         remainingSeconds = millisUntilFinished / 1000;
         minutesLeft = (int) (remainingSeconds / 60);
         secondsLeft = (int) (remainingSeconds % 60);
+        String FORMAT = "%02d:%02d";
         mTimerText.setText(String.format(FORMAT, minutesLeft, secondsLeft));
     }
 

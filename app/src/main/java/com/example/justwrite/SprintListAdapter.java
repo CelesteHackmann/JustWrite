@@ -39,7 +39,7 @@ public class SprintListAdapter extends RecyclerView.Adapter<SprintListAdapter.Sp
         return mSprintList.size();
     }
 
-    class SprintViewHolder extends RecyclerView.ViewHolder {
+    static class SprintViewHolder extends RecyclerView.ViewHolder {
         public final TextView sprintItemView;
         public final TextView sprintWordCount;
         final SprintListAdapter mAdapter;

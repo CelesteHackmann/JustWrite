@@ -3,10 +3,12 @@ package com.example.justwrite;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
 public class Project implements Parcelable {
-    String mTitle;
-    String mGenre;
-    long mProjectId;
+    private String mTitle;
+    private String mGenre;
+    private final long mProjectId;
 
     public Project(String name, String genre, long id) {
         mTitle = name;
@@ -44,6 +46,7 @@ public class Project implements Parcelable {
         }
     };
 
+    @NonNull
     @Override
     public String toString() {
         return mTitle;

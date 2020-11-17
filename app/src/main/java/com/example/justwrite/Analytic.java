@@ -1,8 +1,8 @@
 package com.example.justwrite;
 
 public class Analytic {
-    private String mName;
-    private String mData;
+    private final String mName;
+    private final String mData;
 
     public Analytic(String name, String data) {
         mName = name;

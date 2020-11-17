@@ -5,9 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static DatabaseHelper sInstance;
@@ -74,79 +74,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public int getTotalWordCount(long currentProjectId) {
-        Cursor result = getReadableDatabase().query(
-                PROJECTS_STATS_TABLE,
-                new String[] { KEY_TOTAL_WORDS },
-                KEY_PROJECT_ID + "=?",
-                new String[] { String.valueOf(currentProjectId) },
-                null,
-                null,
-                null
-        );
-        if (result.moveToFirst()) {
-            int wordCount = result.getInt(result.getColumnIndex(KEY_TOTAL_WORDS));
-            Log.d("HELP_WORD_COUNT", String.valueOf(wordCount));
-            return wordCount;
-        }
-        return 0;
-    }
-
-    public int getTotalTime(long currentProjectId) {
-        Cursor result = getReadableDatabase().query(
-                PROJECTS_STATS_TABLE,
-                new String[] { KEY_TOTAL_TIME },
-                KEY_PROJECT_ID + "=?",
-                new String[] { String.valueOf(currentProjectId) },
-                null,
-                null,
-                null
-        );
-        if (result.moveToFirst()) {
-            int totalTime = result.getInt(result.getColumnIndex(KEY_TOTAL_TIME));
-            Log.d("HELP_TOTAL_TIME", String.valueOf(totalTime));
-            return totalTime;
-        }
-        return 0;
-    }
-
-    public int getTotalUnfocusedTime(long currentProjectId) {
-        Cursor result = getReadableDatabase().query(
-                PROJECTS_STATS_TABLE,
-                new String[] { KEY_TOTAL_UNFOCUSED_TIME },
-                KEY_PROJECT_ID + "=?",
-                new String[] { String.valueOf(currentProjectId) },
-                null,
-                null,
-                null
-        );
-        if (result.moveToFirst()) {
-            int unfocusedTime = result.getInt(result.getColumnIndex(KEY_TOTAL_UNFOCUSED_TIME));
-            Log.d("HELP_UNFOCUSED", String.valueOf(unfocusedTime));
-            return unfocusedTime;
-        }
-        return 0;
-    }
-
-    public ArrayList<Project> getProjectList() {
-        ArrayList<Project> projects = new ArrayList<>();
-        Cursor result = getReadableDatabase().query(
-                PROJECTS_TABLE,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null
-        );
-        while (result.moveToNext()) {
-            projects.add(new Project(result.getString(result.getColumnIndex(KEY_TITLE)),
-                    result.getString(result.getColumnIndex(KEY_GENRE)),
-                    result.getLong(result.getColumnIndex(KEY_PROJECT_ID))));
-        }
-        return projects;
-    }
-
     public long insertProject(String pName, String pGenre) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues projectValues = new ContentValues();
@@ -189,5 +116,102 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String selection = KEY_PROJECT_ID + " LIKE ?";
         String[] selectionArgs = {String.valueOf(currentProjectId)};
         db.update(PROJECTS_STATS_TABLE, statsValues, selection, selectionArgs);
+    }
+
+    public ArrayList<Project> getProjectList() {
+        ArrayList<Project> projects = new ArrayList<>();
+        Cursor result = getReadableDatabase().query(
+                PROJECTS_TABLE,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+        while (result.moveToNext()) {
+            projects.add(new Project(result.getString(result.getColumnIndex(KEY_TITLE)),
+                    result.getString(result.getColumnIndex(KEY_GENRE)),
+                    result.getLong(result.getColumnIndex(KEY_PROJECT_ID))));
+        }
+        return projects;
+    }
+
+    public LinkedList<Analytic> getAnalyticsList(String selectedProjectId) {
+        LinkedList<Analytic> analyticsList = new LinkedList<>();
+        Cursor cursor = getReadableDatabase().query(PROJECTS_STATS_TABLE,
+                null,
+                KEY_PROJECT_ID + "=?",
+                new String[] {selectedProjectId},
+                null, null, null);
+        while (cursor.moveToNext()){
+            analyticsList.addLast(new Analytic("Total Words: ", cursor.getInt(cursor.getColumnIndex(KEY_TOTAL_WORDS))));
+            analyticsList.addLast(new Analytic("Total Time: ", cursor.getInt(cursor.getColumnIndex(KEY_TOTAL_TIME)) + " seconds"));
+            analyticsList.addLast(new Analytic("Total Unfocused Time: ", cursor.getInt(cursor.getColumnIndex(KEY_TOTAL_UNFOCUSED_TIME)) + " seconds"));
+        }
+        return analyticsList;
+    }
+
+    public int getTotalWordCount(long currentProjectId) {
+        Cursor result = getReadableDatabase().query(
+                PROJECTS_STATS_TABLE,
+                new String[] { KEY_TOTAL_WORDS },
+                KEY_PROJECT_ID + "=?",
+                new String[] { String.valueOf(currentProjectId) },
+                null,
+                null,
+                null
+        );
+        if (result.moveToFirst()) {
+            return result.getInt(result.getColumnIndex(KEY_TOTAL_WORDS));
+        }
+        return 0;
+    }
+
+    public int getTotalTime(long currentProjectId) {
+        Cursor result = getReadableDatabase().query(
+                PROJECTS_STATS_TABLE,
+                new String[] { KEY_TOTAL_TIME },
+                KEY_PROJECT_ID + "=?",
+                new String[] { String.valueOf(currentProjectId) },
+                null,
+                null,
+                null
+        );
+        if (result.moveToFirst()) {
+            return result.getInt(result.getColumnIndex(KEY_TOTAL_TIME));
+        }
+        return 0;
+    }
+
+    public int getTotalUnfocusedTime(long currentProjectId) {
+        Cursor result = getReadableDatabase().query(
+                PROJECTS_STATS_TABLE,
+                new String[] { KEY_TOTAL_UNFOCUSED_TIME },
+                KEY_PROJECT_ID + "=?",
+                new String[] { String.valueOf(currentProjectId) },
+                null,
+                null,
+                null
+        );
+        if (result.moveToFirst()) {
+            return result.getInt(result.getColumnIndex(KEY_TOTAL_UNFOCUSED_TIME));
+        }
+        return 0;
+    }
+
+    public LinkedList<Sprint> getSprintsForProject(String selectedProjectId) {
+        LinkedList<Sprint> sprintList = new LinkedList<>();
+        Cursor cursor = getReadableDatabase().query(SPRINTS_TABLE,
+                null,
+                KEY_PROJECT_ID + "=?",
+                new String[] {selectedProjectId},
+                null, null, null);
+        while (cursor.moveToNext()) {
+            sprintList.addFirst(new Sprint(cursor.getInt(cursor.getColumnIndex(KEY_SPRINT_TIME)),
+                    cursor.getInt(cursor.getColumnIndex(KEY_UNFOCUSED_TIME)),
+                    cursor.getInt(cursor.getColumnIndex(KEY_WORD_COUNT))));
+        }
+        return sprintList;
     }
 }

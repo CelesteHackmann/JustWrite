@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayAdapter<Project> arrayAdapter;
     ArrayList<Project> projectAndIds = new ArrayList<>();
     private static final int RESULT_SPRINT_OVER = 2;
-    private Project defaultProjectAndId = new Project("Select a Project","Undefined", -1);
+    private final Project defaultProjectAndId = new Project("Select a Project","Undefined", -1);
 
     private DatabaseHelper mDB;
     private long currentProjectId;
@@ -39,26 +39,9 @@ public class MainActivity extends AppCompatActivity {
         mMinuteText = findViewById(R.id.editMinutes);
         mSecondText = findViewById(R.id.editSeconds);
         mSpinnerProjects = findViewById(R.id.spinnerProjects);
-        setupNumberPickers();
-
         mDB = DatabaseHelper.getInstance(this);
+        setupNumberPickers();
         setUpProjectSpinner();
-
-        arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, projectAndIds);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        mSpinnerProjects.setAdapter(arrayAdapter);
-        mSpinnerProjects.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Project selected = projectAndIds.get(position);
-                currentProjectId = selected.getId();
-            }
-            @Override
-            public void onNothingSelected(AdapterView <?> parent) {
-            }
-        });
-
     }
 
     public void startSprint(View view) {
@@ -82,19 +65,7 @@ public class MainActivity extends AppCompatActivity {
         final EditText projectName = layout.findViewById(R.id.editProjectName);
         final EditText projectGenre = layout.findViewById(R.id.editGenre);
 
-        final AlertDialog alert = new AlertDialog.Builder(MainActivity.this)
-                .setTitle("Create a New Project")
-                .setView(layout)
-                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String titleString = projectName.getText().toString();
-                        String genreString = projectGenre.getText().toString();
-                        addProject(titleString, genreString);
-                    }
-                })
-                .setCancelable(true)
-                .create();
+        final AlertDialog alert = getCreateProjectDialog(layout, projectName, projectGenre);
         projectName.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -160,9 +131,20 @@ public class MainActivity extends AppCompatActivity {
 
     private void setUpProjectSpinner() {
         projectAndIds = mDB.getProjectList();
-        if (projectAndIds.size() == 0) {
-            projectAndIds.add(defaultProjectAndId);
-        }
+        projectAndIds.add(0, defaultProjectAndId);
+        arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, projectAndIds);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinnerProjects.setAdapter(arrayAdapter);
+        mSpinnerProjects.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Project selected = projectAndIds.get(position);
+                currentProjectId = selected.getId();
+            }
+            @Override
+            public void onNothingSelected(AdapterView <?> parent) {
+            }
+        });
     }
 
     private void setupNumberPickers() {
@@ -177,6 +159,22 @@ public class MainActivity extends AppCompatActivity {
                 return String.format("%02d", i);
             }
         });
+    }
+
+    private AlertDialog getCreateProjectDialog(View layout, final EditText projectName, final EditText projectGenre) {
+        return new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Create a New Project")
+                .setView(layout)
+                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String titleString = projectName.getText().toString();
+                        String genreString = projectGenre.getText().toString();
+                        addProject(titleString, genreString);
+                    }
+                })
+                .setCancelable(true)
+                .create();
     }
 
     private void hideKeyboard() {

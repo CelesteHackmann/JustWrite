@@ -3,6 +3,8 @@ package com.example.justwrite;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
 public class Sprint implements Parcelable {
     int mSprintTimeSeconds;
     int mUnfocusedSeconds;
@@ -44,6 +46,7 @@ public class Sprint implements Parcelable {
         }
     };
 
+    @NonNull
     @Override
     public String toString() {
         int minutes = mSprintTimeSeconds/60;

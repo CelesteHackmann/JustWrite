@@ -59,7 +59,7 @@
             android:layout_marginTop="16dp"
             android:backgroundTint="@color/colorAccent"
             android:onClick="createProject"
-            android:text="Create New Project" />
+            android:text="@string/create_project_button_text" />
 
         <Button
             android:id="@+id/startButton"
@@ -69,7 +69,7 @@
             android:layout_marginTop="16dp"
             android:backgroundTint="@color/colorAccent"
             android:onClick="startSprint"
-            android:text="Start Sprint" />
+            android:text="@string/start_sprint_button_text" />
 
         <Button
             android:id="@+id/sprintHistoryButton"
@@ -79,7 +79,7 @@
             android:layout_marginTop="16dp"
             android:backgroundTint="@color/colorAccent"
             android:onClick="seeSprintLog"
-            android:text="See Sprint Log" />
+            android:text="@string/see_sprint_log_button_text" />
 
         <Button
             android:id="@+id/projectAnalyticsButton"
@@ -89,7 +89,7 @@
             android:layout_marginTop="16dp"
             android:backgroundTint="@color/colorAccent"
             android:onClick="seeProjectAnalytics"
-            android:text="See Project Analytics" />
+            android:text="@string/see_project_analytics_button_text" />
 
 
 
