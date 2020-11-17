@@ -28,7 +28,7 @@ public class SprintHistory extends AppCompatActivity {
         setContentView(R.layout.activity_history_and_analytics);
         mDB = DatabaseHelper.getInstance(this);
         mProjectName = findViewById(R.id.selected_project_name);
-        mProjectName.setText("No Project Data To Show");
+        mProjectName.setText(R.string.no_project_to_show_string);
 
         ArrayList<Project> projects = mDB.getProjectList();
         if (projects != null) {
