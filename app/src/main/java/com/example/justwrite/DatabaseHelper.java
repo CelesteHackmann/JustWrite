@@ -139,6 +139,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     cursor.getString(cursor.getColumnIndex(KEY_GENRE)),
                     cursor.getLong(cursor.getColumnIndex(KEY_PROJECT_ID))));
         }
+        cursor.close();
         return projects;
     }
 
@@ -154,6 +155,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             analyticsList.addLast(new Analytic("Total Time", cursor.getInt(cursor.getColumnIndex(KEY_TOTAL_TIME)) + " seconds"));
             analyticsList.addLast(new Analytic("Total Unfocused Time", cursor.getInt(cursor.getColumnIndex(KEY_TOTAL_UNFOCUSED_TIME)) + " seconds"));
         }
+        cursor.close();
         return analyticsList;
     }
 
@@ -170,6 +172,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             return cursor.getInt(cursor.getColumnIndex(KEY_TOTAL_WORDS));
         }
+        cursor.close();
         return 0;
     }
 
@@ -186,6 +189,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             return cursor.getInt(cursor.getColumnIndex(KEY_TOTAL_TIME));
         }
+        cursor.close();
         return 0;
     }
 
@@ -202,6 +206,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             return cursor.getInt(cursor.getColumnIndex(KEY_TOTAL_UNFOCUSED_TIME));
         }
+        cursor.close();
         return 0;
     }
 
@@ -216,6 +221,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             return cursor.getInt(cursor.getColumnIndex(KEY_NUMBER_OF_SPRINTS));
         }
+        cursor.close();
         return 0;
     }
 
@@ -231,6 +237,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     cursor.getInt(cursor.getColumnIndex(KEY_UNFOCUSED_TIME)),
                     cursor.getInt(cursor.getColumnIndex(KEY_WORD_COUNT))));
         }
+        cursor.close();
         return sprintList;
     }
 
@@ -269,10 +276,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return wordsPerMinute;
     }
 
-    private int calculateAverage(int sum, int numOfOccurences) {
+    private int calculateAverage(int sum, int numOfOccurrences) {
         int average = 0;
-        if (numOfOccurences != 0) {
-            average = sum / numOfOccurences;
+        if (numOfOccurrences != 0) {
+            average = sum / numOfOccurrences;
         }
         return average;
     }

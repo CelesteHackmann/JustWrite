@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.LinkedList;
 
 public class SprintListAdapter extends RecyclerView.Adapter<SprintListAdapter.SprintViewHolder> {
-    private LinkedList<Sprint> mSprintList;
-    private LayoutInflater mInflater;
+    private final LinkedList<Sprint> mSprintList;
+    private final LayoutInflater mInflater;
 
     public SprintListAdapter(Context context, LinkedList<Sprint> sprintList) {
         mInflater = LayoutInflater.from(context);
@@ -24,7 +24,7 @@ public class SprintListAdapter extends RecyclerView.Adapter<SprintListAdapter.Sp
     @Override
     public SprintViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View mItemView = mInflater.inflate(R.layout.sprint_list_item, parent, false);
-        return new SprintViewHolder(mItemView, this);
+        return new SprintViewHolder(mItemView);
     }
 
     @Override
@@ -42,12 +42,10 @@ public class SprintListAdapter extends RecyclerView.Adapter<SprintListAdapter.Sp
     static class SprintViewHolder extends RecyclerView.ViewHolder {
         public final TextView sprintItemView;
         public final TextView sprintWordCount;
-        final SprintListAdapter mAdapter;
 
-        public SprintViewHolder(View itemView, SprintListAdapter adapter) {
+        public SprintViewHolder(View itemView) {
             super(itemView);
             sprintItemView = itemView.findViewById(R.id.sprint);
-            this.mAdapter = adapter;
             sprintWordCount = itemView.findViewById(R.id.sprintWordCount);
         }
     }

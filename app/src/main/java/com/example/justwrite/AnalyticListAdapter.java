@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.LinkedList;
 
 public class AnalyticListAdapter extends RecyclerView.Adapter<AnalyticListAdapter.AnalyticViewHolder> {
-    private LinkedList<Analytic> mAnalyticList;
-    private LayoutInflater mInflater;
+    private final LinkedList<Analytic> mAnalyticList;
+    private final LayoutInflater mInflater;
 
     public AnalyticListAdapter(Context context, LinkedList<Analytic> analyticsList) {
         mInflater = LayoutInflater.from(context);
@@ -24,7 +24,7 @@ public class AnalyticListAdapter extends RecyclerView.Adapter<AnalyticListAdapte
     @Override
     public AnalyticViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View mItemView = mInflater.inflate(R.layout.analytic_list_item, parent, false);
-        return new AnalyticViewHolder(mItemView, this);
+        return new AnalyticViewHolder(mItemView);
     }
 
     @Override
@@ -42,12 +42,10 @@ public class AnalyticListAdapter extends RecyclerView.Adapter<AnalyticListAdapte
     static class AnalyticViewHolder extends RecyclerView.ViewHolder {
         public final TextView analyticName;
         public final TextView analyticData;
-        final AnalyticListAdapter mAdapter;
 
-        public AnalyticViewHolder(View itemView, AnalyticListAdapter adapter) {
+        public AnalyticViewHolder(View itemView) {
             super(itemView);
             analyticName = itemView.findViewById(R.id.analyticName);
-            this.mAdapter = adapter;
             analyticData = itemView.findViewById(R.id.analyticData);
         }
     }

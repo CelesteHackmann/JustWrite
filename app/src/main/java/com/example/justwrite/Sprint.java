@@ -6,9 +6,9 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
 public class Sprint implements Parcelable {
-    int mSprintTimeSeconds;
-    int mUnfocusedSeconds;
-    int mWordCount;
+    final int mSprintTimeSeconds;
+    final int mUnfocusedSeconds;
+    final int mWordCount;
 
     public Sprint(int numInSeconds, int unfocusedTime, int wordCount) {
         mSprintTimeSeconds = numInSeconds;
