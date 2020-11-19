@@ -27,10 +27,10 @@ public class MainActivity extends AppCompatActivity {
     ArrayAdapter<Project> arrayAdapter;
     ArrayList<Project> projectAndIds = new ArrayList<>();
     private static final int RESULT_SPRINT_OVER = 2;
-    private final Project defaultProjectAndId = new Project("Select a Project","Undefined", -1);
+    private final Project defaultProjectAndId = new Project("Select a Project","Undefined", "-1");
 
     private DatabaseHelper mDB;
-    private long currentProjectId;
+    private String currentProjectId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +97,8 @@ public class MainActivity extends AppCompatActivity {
                 int sprintTime = data.getIntExtra("sprint time", 0);
                 int unfocusedTime = data.getIntExtra("unfocused time", 0);
                 int wordCount = data.getIntExtra("words written", 0);
-                mDB.addSprint(sprintTime, unfocusedTime, wordCount, currentProjectId);
+                Sprint sprint = new Sprint(sprintTime, unfocusedTime, wordCount);
+                mDB.addSprint(sprint, String.valueOf(currentProjectId));
                 mDB.updateProjectStats(sprintTime, unfocusedTime, wordCount, currentProjectId);
             }
         }
@@ -117,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void addProject(String pName, String pGenre) {
         // Add Project to Database
-        currentProjectId = mDB.insertProject(pName, pGenre);
+        currentProjectId = String.valueOf(mDB.insertProject(pName, pGenre));
 
         // Set Up Project Stats for new Project
         mDB.insertProjectStats(currentProjectId);

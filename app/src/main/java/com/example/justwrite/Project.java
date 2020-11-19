@@ -4,29 +4,32 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import java.util.Objects;
 
 public class Project implements Parcelable {
     private String mTitle;
     private String mGenre;
-    private final long mProjectId;
+    private final String mProjectId;
 
-    public Project(String name, String genre, long id) {
+    public Project(String name, String genre, String id) {
         mTitle = name;
         mGenre = genre;
-        mProjectId = id;
+        mProjectId = String.valueOf(id);
     }
 
     protected Project(Parcel in) {
         mTitle = in.readString();
         mGenre = in.readString();
-        mProjectId = in.readLong();
+        mProjectId = in.readString();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mTitle);
         dest.writeString(mGenre);
-        dest.writeLong(mProjectId);
+        dest.writeString(mProjectId);
     }
 
     @Override
@@ -60,7 +63,7 @@ public class Project implements Parcelable {
         return mGenre;
     }
 
-    public long getId() {
+    public String getId() {
         return mProjectId;
     }
 
@@ -71,4 +74,23 @@ public class Project implements Parcelable {
     public void setGenre(String newGenre) {
         mGenre = newGenre;
     }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (this == obj) { return true; }
+        if (obj == null || getClass() != obj.getClass()) { return false; };
+        Project project = (Project) obj;
+        if (this == project) {
+            return true;
+        }
+        return (mTitle.equals(project.getTitle()) &&
+                mGenre.equals(project.getGenre()) &&
+                mProjectId.equals(project.getId()));
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(mTitle, mGenre, mProjectId);
+    }
+
 }

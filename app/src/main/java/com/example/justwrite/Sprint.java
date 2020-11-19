@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import java.util.Objects;
+
 public class Sprint implements Parcelable {
     final int mSprintTimeSeconds;
     final int mUnfocusedSeconds;
@@ -71,5 +73,20 @@ public class Sprint implements Parcelable {
 
     public int getSprintTimeSeconds() {
         return mSprintTimeSeconds;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) { return true; }
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Sprint sprint = (Sprint) obj;
+        return (mSprintTimeSeconds == sprint.mSprintTimeSeconds &&
+                mUnfocusedSeconds == sprint.mUnfocusedSeconds &&
+                mWordCount == sprint.mWordCount);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(mSprintTimeSeconds, mUnfocusedSeconds, mWordCount);
     }
 }

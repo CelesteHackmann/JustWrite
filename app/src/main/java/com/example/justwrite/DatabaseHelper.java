@@ -51,7 +51,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_PROJECT_STATS = "CREATE TABLE " + PROJECTS_STATS_TABLE
             + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TOTAL_WORDS + " INTEGER,"
             + KEY_TOTAL_TIME + " INTEGER," + KEY_TOTAL_UNFOCUSED_TIME + " INTEGER,"
-            + KEY_NUMBER_OF_SPRINTS + " INTEGER," + KEY_PROJECT_ID + " INTEGER)";
+            + KEY_NUMBER_OF_SPRINTS + " INTEGER," + KEY_PROJECT_ID + " TEXT)";
 
     private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -84,7 +84,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.insert(PROJECTS_TABLE, null, projectValues);
     }
 
-    public void insertProjectStats(long currentProjectId) {
+    public void insertProjectStats(String currentProjectId) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues statsValues = new ContentValues();
         statsValues.put(KEY_PROJECT_ID, currentProjectId);
@@ -95,22 +95,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.insert(PROJECTS_STATS_TABLE, null, statsValues);
     }
 
-    public void addSprint(int sprintTime, int unfocusedTime, int wordCount, long currentProjectId) {
+    public void addSprint(Sprint sprint, String currentProjectId) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues sprintValues = new ContentValues();
-        sprintValues.put(KEY_SPRINT_TIME, sprintTime);
-        sprintValues.put(KEY_WORD_COUNT, wordCount);
-        sprintValues.put(KEY_UNFOCUSED_TIME, unfocusedTime);
+        sprintValues.put(KEY_SPRINT_TIME, sprint.getSprintTimeSeconds());
+        sprintValues.put(KEY_WORD_COUNT, sprint.getWordCount());
+        sprintValues.put(KEY_UNFOCUSED_TIME, sprint.getUnfocusedSeconds());
         sprintValues.put(KEY_PROJECT_ID, currentProjectId);
         db.insert(SPRINTS_TABLE, null, sprintValues);
     }
 
-    public void updateProjectStats(int sprintTime, int unfocusedTime, int wordCount, long currentProjectId) {
+    public void updateProjectStats(int sprintTime, int unfocusedTime, int wordCount, String currentProjectId) {
         SQLiteDatabase db = getWritableDatabase();
-        int newWordCount = wordCount + getTotalWordCount(String.valueOf(currentProjectId));
-        int newTotalTime = sprintTime + getTotalTime(String.valueOf(currentProjectId));
-        int newTotalUnfocusedTime = unfocusedTime + getTotalUnfocusedTime(String.valueOf(currentProjectId));
-        int newNumberSprints = 1 + getCurrentNumberOfSprints(String.valueOf(currentProjectId));
+        int newWordCount = wordCount + getTotalWordCount(currentProjectId);
+        int newTotalTime = sprintTime + getTotalTime(currentProjectId);
+        int newTotalUnfocusedTime = unfocusedTime + getTotalUnfocusedTime(currentProjectId);
+        int newNumberSprints = 1 + getCurrentNumberOfSprints(currentProjectId);
 
         ContentValues statsValues = new ContentValues();
         statsValues.put(KEY_TOTAL_WORDS, newWordCount);
@@ -119,7 +119,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         statsValues.put(KEY_NUMBER_OF_SPRINTS, newNumberSprints);
 
         String selection = KEY_PROJECT_ID + " LIKE ?";
-        String[] selectionArgs = {String.valueOf(currentProjectId)};
+        String[] selectionArgs = {currentProjectId};
         db.update(PROJECTS_STATS_TABLE, statsValues, selection, selectionArgs);
     }
 
@@ -137,7 +137,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         while (cursor.moveToNext()) {
             projects.add(new Project(cursor.getString(cursor.getColumnIndex(KEY_TITLE)),
                     cursor.getString(cursor.getColumnIndex(KEY_GENRE)),
-                    cursor.getLong(cursor.getColumnIndex(KEY_PROJECT_ID))));
+                    cursor.getString(cursor.getColumnIndex(KEY_PROJECT_ID))));
         }
         cursor.close();
         return projects;
