@@ -13,6 +13,7 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 
 import static org.junit.Assert.assertEquals;
@@ -27,9 +28,11 @@ public class DatabaseTests {
     private Project projectYoungAdult1 = new Project("Project 1", "Young Adult", "1");
     private Project projectAdult2 = new Project("Project 2", "Adult", "2");
     private Project projectTeenFiction3 = new Project("Project 3", "Teen Fiction", "3");
-    private Sprint sprint1 = new Sprint(1200, 0, 800);
-    private Sprint sprint2 = new Sprint(2134, 321, 324);
-    private Sprint sprint3 = new Sprint(1201, 10, 500);
+    Date time1 = new Date(1606500630);
+
+    private Sprint sprint1 = new Sprint(1200, 0, 800, time1);
+    private Sprint sprint2 = new Sprint(2134, 321, 324, time1);
+    private Sprint sprint3 = new Sprint(1201, 10, 500, time1);
 
     @Before
     public void setUpDatabase() {
@@ -50,7 +53,7 @@ public class DatabaseTests {
     }
 
     @Test
-    public void getProjectsList() {
+    public void getProjectsList_ThreeProjects() {
         ArrayList<Project> result = db.getProjectList();
         ArrayList<Project> expectedList = new ArrayList<>();
         expectedList.add(projectYoungAdult1);
@@ -64,10 +67,9 @@ public class DatabaseTests {
 
     @Test
     public void insertAndGetSprints_OneBasicSprint() {
-        Sprint basicSprint = new Sprint(1200, 0, 800);
         LinkedList<Sprint> expectedList = new LinkedList<>();
-        expectedList.add(basicSprint);
-        db.addSprint(basicSprint, projectYoungAdult1.getId());
+        expectedList.add(sprint1);
+        db.addSprint(sprint1, projectYoungAdult1.getId());
         LinkedList<Sprint> result = db.getSprintsForProject(String.valueOf(projectYoungAdult1.getId()));
         assertEquals(expectedList.size(), result.size());
         assertEquals(expectedList, result);

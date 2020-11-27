@@ -30,6 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String KEY_SPRINT_TIME = "sprint_time";
     public static final String KEY_UNFOCUSED_TIME = "unfocused_time";
     public static final String KEY_WORD_COUNT = "word_count";
+    public static final String KEY_SPRINT_DATE = "sprint_date";
 
     // PROJECT STATS Column Names
     public static final String KEY_TOTAL_WORDS = "total_words";
@@ -45,7 +46,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // SPRINTS Table Create Statement
     private static final String CREATE_TABLE_SPRINTS = "CREATE TABLE " + SPRINTS_TABLE
             + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_SPRINT_TIME + " INTEGER,"
-            + KEY_UNFOCUSED_TIME + " INTEGER," + KEY_WORD_COUNT + " INTEGER," + KEY_PROJECT_ID + " INTEGER)";
+            + KEY_UNFOCUSED_TIME + " INTEGER," + KEY_WORD_COUNT + " INTEGER," + KEY_SPRINT_DATE + " STRING,"
+            + KEY_PROJECT_ID + " INTEGER)";
 
     // PROJECT STATS Table Create Statement
     private static final String CREATE_TABLE_PROJECT_STATS = "CREATE TABLE " + PROJECTS_STATS_TABLE
@@ -102,6 +104,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sprintValues.put(KEY_WORD_COUNT, sprint.getWordCount());
         sprintValues.put(KEY_UNFOCUSED_TIME, sprint.getUnfocusedSeconds());
         sprintValues.put(KEY_PROJECT_ID, currentProjectId);
+        sprintValues.put(KEY_SPRINT_DATE, sprint.getTimestamp());
         db.insert(SPRINTS_TABLE, null, sprintValues);
     }
 
@@ -235,7 +238,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         while (cursor.moveToNext()) {
             sprintList.addFirst(new Sprint(cursor.getInt(cursor.getColumnIndex(KEY_SPRINT_TIME)),
                     cursor.getInt(cursor.getColumnIndex(KEY_UNFOCUSED_TIME)),
-                    cursor.getInt(cursor.getColumnIndex(KEY_WORD_COUNT))));
+                    cursor.getInt(cursor.getColumnIndex(KEY_WORD_COUNT)),
+                    cursor.getString(cursor.getColumnIndex(KEY_SPRINT_DATE))));
         }
         cursor.close();
         return sprintList;

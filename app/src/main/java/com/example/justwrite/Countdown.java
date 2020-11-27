@@ -22,6 +22,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public class Countdown extends AppCompatActivity {
     TextView mTimerText;
     CountDownTimer mTimer;
@@ -32,6 +35,7 @@ public class Countdown extends AppCompatActivity {
     long remainingSeconds;
     int secondsLeft;
     int minutesLeft;
+    Date sprintDate;
 
     private NotificationManager mNotifyManager;
     private static final String CHANNEL_ID = "notification_channel";
@@ -99,6 +103,7 @@ public class Countdown extends AppCompatActivity {
                 alert.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
             }
         };
+        sprintDate = Calendar.getInstance().getTime();
         mTimer.start();
     }
 
@@ -119,6 +124,7 @@ public class Countdown extends AppCompatActivity {
                         intent.putExtra("sprint time", numInSeconds);
                         intent.putExtra("unfocused time", mUnfocusedTime);
                         intent.putExtra("words written", wordCount);
+                        intent.putExtra("sprint date", sprintDate);
                         setResult(RESULT_OK, intent);
                         mNotifyManager.cancelAll();
                         finish();

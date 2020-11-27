@@ -19,6 +19,7 @@ import android.widget.Spinner;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
     NumberPicker mMinuteText;
@@ -97,7 +98,8 @@ public class MainActivity extends AppCompatActivity {
                 int sprintTime = data.getIntExtra("sprint time", 0);
                 int unfocusedTime = data.getIntExtra("unfocused time", 0);
                 int wordCount = data.getIntExtra("words written", 0);
-                Sprint sprint = new Sprint(sprintTime, unfocusedTime, wordCount);
+                Date sprintDate = (Date) data.getSerializableExtra("sprint date");
+                Sprint sprint = new Sprint(sprintTime, unfocusedTime, wordCount, sprintDate);
                 mDB.addSprint(sprint, String.valueOf(currentProjectId));
                 mDB.updateProjectStats(sprintTime, unfocusedTime, wordCount, currentProjectId);
             }

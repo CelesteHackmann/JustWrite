@@ -5,23 +5,52 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import java.util.Date;
 import java.util.Objects;
 
 public class Sprint implements Parcelable {
-    final int mSprintTimeSeconds;
-    final int mUnfocusedSeconds;
-    final int mWordCount;
+    private final int mSprintTimeSeconds;
+    private final int mUnfocusedSeconds;
+    private final int mWordCount;
+    private final String mTimestamp;
 
-    public Sprint(int numInSeconds, int unfocusedTime, int wordCount) {
+
+    public Sprint(int numInSeconds, int unfocusedTime, int wordCount, Date timestamp) {
         mSprintTimeSeconds = numInSeconds;
         mUnfocusedSeconds = unfocusedTime;
         mWordCount = wordCount;
+        mTimestamp = timestamp.toString();
+    }
+
+    public Sprint(int numInSeconds, int unfocusedTime, int wordCount, String timestamp) {
+        mSprintTimeSeconds = numInSeconds;
+        mUnfocusedSeconds = unfocusedTime;
+        mWordCount = wordCount;
+        mTimestamp = timestamp;
+    }
+
+
+    @NonNull
+    @Override
+    public String toString() {
+        int minutes = mSprintTimeSeconds/60;
+        int seconds = mSprintTimeSeconds%60;
+        int unfocusedMinutes = mUnfocusedSeconds/60;
+        int unfocusedSeconds = mUnfocusedSeconds%60;
+        String minuteString = String.format("%02d", minutes);
+        String secondString = String.format("%02d", seconds);
+        String unfocusedMinuteString = String.format("%02d", unfocusedMinutes);
+        String unfocusedSecondString = String.format("%02d", unfocusedSeconds);
+        return "Sprint Time - " + minuteString + ":" + secondString +
+                "\nUnfocused Time - " + unfocusedMinuteString + ":" + unfocusedSecondString +
+                "\nDate - " + mTimestamp.toString();
     }
 
     protected Sprint(Parcel in) {
         mSprintTimeSeconds = in.readInt();
         mUnfocusedSeconds = in.readInt();
         mWordCount = in.readInt();
+        mTimestamp = in.readString();
     }
 
     @Override
@@ -29,6 +58,7 @@ public class Sprint implements Parcelable {
         dest.writeInt(mSprintTimeSeconds);
         dest.writeInt(mUnfocusedSeconds);
         dest.writeInt(mWordCount);
+        dest.writeString(mTimestamp);
     }
 
     @Override
@@ -48,21 +78,6 @@ public class Sprint implements Parcelable {
         }
     };
 
-    @NonNull
-    @Override
-    public String toString() {
-        int minutes = mSprintTimeSeconds/60;
-        int seconds = mSprintTimeSeconds%60;
-        int unfocusedMinutes = mUnfocusedSeconds/60;
-        int unfocusedSeconds = mUnfocusedSeconds%60;
-        String minuteString = String.format("%02d", minutes);
-        String secondString = String.format("%02d", seconds);
-        String unfocusedMinuteString = String.format("%02d", unfocusedMinutes);
-        String unfocusedSecondString = String.format("%02d", unfocusedSeconds);
-        return "Sprint Time - " + minuteString + ":" + secondString +
-                "\nUnfocused Time - " + unfocusedMinuteString + ":" + unfocusedSecondString;
-    }
-
     public int getWordCount() {
         return mWordCount;
     }
@@ -75,6 +90,10 @@ public class Sprint implements Parcelable {
         return mSprintTimeSeconds;
     }
 
+    public String getTimestamp() {
+        return mTimestamp;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) { return true; }
@@ -82,7 +101,8 @@ public class Sprint implements Parcelable {
         Sprint sprint = (Sprint) obj;
         return (mSprintTimeSeconds == sprint.mSprintTimeSeconds &&
                 mUnfocusedSeconds == sprint.mUnfocusedSeconds &&
-                mWordCount == sprint.mWordCount);
+                mWordCount == sprint.mWordCount &&
+                mTimestamp == sprint.mTimestamp);
     }
 
     @Override
