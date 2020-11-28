@@ -16,7 +16,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String PROJECTS_TABLE = "PROJECTS";
     public static final String SPRINTS_TABLE = "SPRINTS";
     public static final String PROJECTS_STATS_TABLE = "PROJECT_STATS";
-    private static final String DATABASE_NAME = "JUSTWRITE.DB";
+    public static final String DATABASE_NAME = "JUSTWRITE.DB";
 
     // Common Column Names
     public static final String KEY_ID = "id";
@@ -39,18 +39,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String KEY_NUMBER_OF_SPRINTS = "number_of_sprints";
 
     // PROJECTS Table Create Statement
-    private static final String CREATE_TABLE_PROJECTS = "CREATE TABLE " + PROJECTS_TABLE
+    public static final String CREATE_TABLE_PROJECTS = "CREATE TABLE " + PROJECTS_TABLE
             + "(" + KEY_PROJECT_ID + " INTEGER PRIMARY KEY," + KEY_TITLE + " TEXT,"
             + KEY_GENRE + " TEXT)";
 
     // SPRINTS Table Create Statement
-    private static final String CREATE_TABLE_SPRINTS = "CREATE TABLE " + SPRINTS_TABLE
+    public static final String CREATE_TABLE_SPRINTS = "CREATE TABLE " + SPRINTS_TABLE
             + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_SPRINT_TIME + " INTEGER,"
             + KEY_UNFOCUSED_TIME + " INTEGER," + KEY_WORD_COUNT + " INTEGER," + KEY_SPRINT_DATE + " STRING,"
             + KEY_PROJECT_ID + " INTEGER)";
 
     // PROJECT STATS Table Create Statement
-    private static final String CREATE_TABLE_PROJECT_STATS = "CREATE TABLE " + PROJECTS_STATS_TABLE
+    public static final String CREATE_TABLE_PROJECT_STATS = "CREATE TABLE " + PROJECTS_STATS_TABLE
             + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TOTAL_WORDS + " INTEGER,"
             + KEY_TOTAL_TIME + " INTEGER," + KEY_TOTAL_UNFOCUSED_TIME + " INTEGER,"
             + KEY_NUMBER_OF_SPRINTS + " INTEGER," + KEY_PROJECT_ID + " TEXT)";
@@ -83,7 +83,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues projectValues = new ContentValues();
         projectValues.put(KEY_TITLE, pName);
         projectValues.put(KEY_GENRE, pGenre);
-        return db.insert(PROJECTS_TABLE, null, projectValues);
+        Long projectId = db.insert(PROJECTS_TABLE, null, projectValues);
+        db.close();
+        return projectId;
     }
 
     public void insertProjectStats(String currentProjectId) {
@@ -95,6 +97,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         statsValues.put(KEY_TOTAL_UNFOCUSED_TIME, 0);
         statsValues.put(KEY_NUMBER_OF_SPRINTS, 0);
         db.insert(PROJECTS_STATS_TABLE, null, statsValues);
+        db.close();
     }
 
     public void addSprint(Sprint sprint, String currentProjectId) {
@@ -106,6 +109,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sprintValues.put(KEY_PROJECT_ID, currentProjectId);
         sprintValues.put(KEY_SPRINT_DATE, sprint.getTimestamp());
         db.insert(SPRINTS_TABLE, null, sprintValues);
+        db.close();
     }
 
     public void updateProjectStats(int sprintTime, int unfocusedTime, int wordCount, String currentProjectId) {
@@ -124,6 +128,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String selection = KEY_PROJECT_ID + " LIKE ?";
         String[] selectionArgs = {currentProjectId};
         db.update(PROJECTS_STATS_TABLE, statsValues, selection, selectionArgs);
+        db.close();
+    }
+
+    public void updateProjectTitleAndGenre(String currentProjectId, String newTitle, String newGenre) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues projectValues = new ContentValues();
+        projectValues.put(KEY_TITLE, newTitle);
+        projectValues.put(KEY_GENRE, newGenre);
+        String selection = KEY_PROJECT_ID + " LIKE ?";
+        String[] selectionArgs = {currentProjectId};
+        db.update(PROJECTS_TABLE, projectValues, selection, selectionArgs);
+        db.close();
     }
 
     public ArrayList<Project> getProjectList() {

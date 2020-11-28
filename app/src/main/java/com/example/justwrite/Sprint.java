@@ -43,7 +43,7 @@ public class Sprint implements Parcelable {
         String unfocusedSecondString = String.format("%02d", unfocusedSeconds);
         return "Sprint Time - " + minuteString + ":" + secondString +
                 "\nUnfocused Time - " + unfocusedMinuteString + ":" + unfocusedSecondString +
-                "\nDate - " + mTimestamp.toString();
+                "\nDate - " + mTimestamp;
     }
 
     protected Sprint(Parcel in) {
@@ -95,18 +95,18 @@ public class Sprint implements Parcelable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) { return true; }
-        if (obj == null || getClass() != obj.getClass()) return false;
-        Sprint sprint = (Sprint) obj;
-        return (mSprintTimeSeconds == sprint.mSprintTimeSeconds &&
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Sprint sprint = (Sprint) o;
+        return mSprintTimeSeconds == sprint.mSprintTimeSeconds &&
                 mUnfocusedSeconds == sprint.mUnfocusedSeconds &&
                 mWordCount == sprint.mWordCount &&
-                mTimestamp == sprint.mTimestamp);
+                mTimestamp.equals(sprint.mTimestamp);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(mSprintTimeSeconds, mUnfocusedSeconds, mWordCount);
+        return Objects.hash(mSprintTimeSeconds, mUnfocusedSeconds, mWordCount, mTimestamp);
     }
 }

@@ -7,14 +7,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class AnalyticsActivity extends AppCompatActivity {
+public class AnalyticsActivity extends BaseActivity {
     private RecyclerView mRecyclerView;
     private AnalyticListAdapter mAdapter;
     private Spinner mSpinnerProjects;
@@ -55,7 +54,7 @@ public class AnalyticsActivity extends AppCompatActivity {
                 analyticsList.add(mDB.getAverageSprintTimeForProject(selectedProjectId));
 
                 // POPULATE RECYCLER VIEW
-                mRecyclerView = findViewById(R.id.recyclerview);
+                mRecyclerView = findViewById(R.id.LogRecyclerView);
                 mAdapter = new AnalyticListAdapter(getApplicationContext(), analyticsList);
                 mRecyclerView.setAdapter(mAdapter);
                 mRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));

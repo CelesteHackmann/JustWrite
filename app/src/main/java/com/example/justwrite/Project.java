@@ -19,40 +19,14 @@ public class Project implements Parcelable {
         mProjectId = String.valueOf(id);
     }
 
-    protected Project(Parcel in) {
-        mTitle = in.readString();
-        mGenre = in.readString();
-        mProjectId = in.readString();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mTitle);
-        dest.writeString(mGenre);
-        dest.writeString(mProjectId);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Creator<Project> CREATOR = new Creator<Project>() {
-        @Override
-        public Project createFromParcel(Parcel in) {
-            return new Project(in);
-        }
-
-        @Override
-        public Project[] newArray(int size) {
-            return new Project[size];
-        }
-    };
-
     @NonNull
     @Override
     public String toString() {
         return mTitle;
+    }
+
+    public String toFullString() {
+        return "Title: " + mTitle + "\nGenre: " + mGenre;
     }
 
     public String getTitle() {
@@ -93,4 +67,33 @@ public class Project implements Parcelable {
         return Objects.hash(mTitle, mGenre, mProjectId);
     }
 
+    protected Project(Parcel in) {
+        mTitle = in.readString();
+        mGenre = in.readString();
+        mProjectId = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mTitle);
+        dest.writeString(mGenre);
+        dest.writeString(mProjectId);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Project> CREATOR = new Creator<Project>() {
+        @Override
+        public Project createFromParcel(Parcel in) {
+            return new Project(in);
+        }
+
+        @Override
+        public Project[] newArray(int size) {
+            return new Project[size];
+        }
+    };
 }

@@ -7,14 +7,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class SprintHistory extends AppCompatActivity {
+public class SprintHistory extends BaseActivity {
 
     private RecyclerView mRecyclerView;
     private SprintListAdapter mAdapter;
@@ -50,7 +49,7 @@ public class SprintHistory extends AppCompatActivity {
                 LinkedList<Sprint> sprintList = mDB.getSprintsForProject(selectedProjectId);
 
                 // POPULATE RECYCLER VIEW
-                mRecyclerView = findViewById(R.id.recyclerview);
+                mRecyclerView = findViewById(R.id.LogRecyclerView);
                 mAdapter = new SprintListAdapter(getApplicationContext(), sprintList);
                 mRecyclerView.setAdapter(mAdapter);
                 mRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));

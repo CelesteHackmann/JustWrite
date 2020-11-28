@@ -1,6 +1,7 @@
 package com.example.justwrite;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 
 import androidx.test.core.app.ApplicationProvider;
@@ -44,12 +45,20 @@ public class DatabaseTests {
         db.insertProjectStats(projectId);
         projectId = String.valueOf(db.insertProject("Project 3", "Teen Fiction"));
         db.insertProjectStats(projectId);
+        System.out.println(db.getProjectList());
     }
 
     @After
     public void createAndCloseDatabase() {
+        SQLiteDatabase writeable = db.getWritableDatabase();
+        writeable.execSQL("DROP TABLE IF EXISTS " + DatabaseHelper.PROJECTS_TABLE);
+        writeable.execSQL("DROP TABLE IF EXISTS " + DatabaseHelper.SPRINTS_TABLE);
+        writeable.execSQL("DROP TABLE IF EXISTS " + DatabaseHelper.PROJECTS_STATS_TABLE);
+        writeable.execSQL(DatabaseHelper.CREATE_TABLE_PROJECTS);
+        writeable.execSQL(DatabaseHelper.CREATE_TABLE_SPRINTS);
+        writeable.execSQL(DatabaseHelper.CREATE_TABLE_PROJECT_STATS);
+        writeable.close();
         db.close();
-        context.deleteDatabase("JUSTWRITE.DB");
     }
 
     @Test
@@ -85,6 +94,20 @@ public class DatabaseTests {
         db.addSprint(sprint2, projectAdult2.getId());
         db.addSprint(sprint3, projectAdult2.getId());
         LinkedList result = db.getSprintsForProject(String.valueOf(projectAdult2.getId()));
+        assertEquals(expectedList, result);
+    }
+
+    @Test
+    public void updateProjectInformationInDatabase() {
+        String newTitle = "New Title";
+        String newGenre = "New Genre";
+        String projectId = projectYoungAdult1.getId();
+        db.updateProjectTitleAndGenre(projectId, newTitle, newGenre);
+        ArrayList<Project> result = db.getProjectList();
+        ArrayList<Project> expectedList = new ArrayList<>();
+        expectedList.add(new Project("New Title", "New Genre", projectId));
+        expectedList.add(projectAdult2);
+        expectedList.add(projectTeenFiction3);
         assertEquals(expectedList, result);
     }
 }

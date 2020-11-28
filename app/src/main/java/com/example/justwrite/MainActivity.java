@@ -16,12 +16,10 @@ import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import java.util.ArrayList;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
     NumberPicker mMinuteText;
     NumberPicker mSecondText;
     Spinner mSpinnerProjects;
