@@ -162,22 +162,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return projects;
     }
 
-    public LinkedList<Analytic> getBasicAnalyticsList(String selectedProjectId) {
-        LinkedList<Analytic> analyticsList = new LinkedList<>();
-        Cursor cursor = getReadableDatabase().query(PROJECTS_STATS_TABLE,
-                null,
-                KEY_PROJECT_ID + "=?",
-                new String[] {selectedProjectId},
-                null, null, null);
-        while (cursor.moveToNext()){
-            analyticsList.addLast(new Analytic("Total Words", cursor.getInt(cursor.getColumnIndex(KEY_TOTAL_WORDS))+ " words"));
-            analyticsList.addLast(new Analytic("Total Time", cursor.getInt(cursor.getColumnIndex(KEY_TOTAL_TIME)) + " seconds"));
-            analyticsList.addLast(new Analytic("Total Unfocused Time", cursor.getInt(cursor.getColumnIndex(KEY_TOTAL_UNFOCUSED_TIME)) + " seconds"));
-        }
-        cursor.close();
-        return analyticsList;
-    }
-
     public int getTotalWordCount(String currentProjectId) {
         Cursor cursor = getReadableDatabase().query(
                 PROJECTS_STATS_TABLE,
@@ -188,11 +172,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 null,
                 null
         );
+        int result = 0;
         if (cursor.moveToFirst()) {
-            return cursor.getInt(cursor.getColumnIndex(KEY_TOTAL_WORDS));
+            result = cursor.getInt(cursor.getColumnIndex(KEY_TOTAL_WORDS));
         }
         cursor.close();
-        return 0;
+        return result;
     }
 
     public int getTotalTime(String currentProjectId) {
@@ -205,11 +190,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 null,
                 null
         );
+        int result = 0;
         if (cursor.moveToFirst()) {
-            return cursor.getInt(cursor.getColumnIndex(KEY_TOTAL_TIME));
+            result = cursor.getInt(cursor.getColumnIndex(KEY_TOTAL_TIME));
         }
         cursor.close();
-        return 0;
+        return result;
     }
 
     public int getTotalUnfocusedTime(String currentProjectId) {
@@ -222,11 +208,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 null,
                 null
         );
+        int result = 0;
         if (cursor.moveToFirst()) {
-            return cursor.getInt(cursor.getColumnIndex(KEY_TOTAL_UNFOCUSED_TIME));
+            result = cursor.getInt(cursor.getColumnIndex(KEY_TOTAL_UNFOCUSED_TIME));
         }
         cursor.close();
-        return 0;
+        return result;
     }
 
     private int getCurrentNumberOfSprints(String currentProjectId) {
@@ -237,11 +224,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[] {currentProjectId},
                 null, null, null
         );
+        int result = 0;
         if (cursor.moveToFirst()) {
-            return cursor.getInt(cursor.getColumnIndex(KEY_NUMBER_OF_SPRINTS));
+            result = cursor.getInt(cursor.getColumnIndex(KEY_NUMBER_OF_SPRINTS));
         }
         cursor.close();
-        return 0;
+        return result;
     }
 
     public LinkedList<Sprint> getSprintsForProject(String selectedProjectId) {
@@ -263,12 +251,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Analytic getWordsPerMinuteAnalyticForProject(String selectedProjectId) {
         int wordsPerMinute = getWordsPerMinute(selectedProjectId);
-        return new Analytic("Words Per Minute", wordsPerMinute + " words per minute");
+        return new Analytic("Average Words Per Minute", wordsPerMinute + " words");
     }
 
     public Analytic getAverageWordsPer30MinAnalyticForProject(String selectedProjectId) {
         int wordsPer30Minutes = getWordsPerMinute(selectedProjectId) * 30;
-        return new Analytic("Words Per 30 Minutes", wordsPer30Minutes + " words per 30 minutes");
+        return new Analytic("Average Words Per 30 Minutes", wordsPer30Minutes + " words");
     }
 
     public Analytic getAverageWordsPerSprintForProject(String selectedProjectId) {
@@ -279,10 +267,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Analytic getAverageSprintTimeForProject(String selectedProjectId) {
-        int totalTime = getTotalTime(selectedProjectId);
+        int totalSeconds = getTotalTime(selectedProjectId);
         int numSprints = getCurrentNumberOfSprints(selectedProjectId);
-        int avgSecondsPerSprint = calculateAverage(totalTime, numSprints);
-        return new Analytic("Average Time Per Sprint", avgSecondsPerSprint + " seconds");
+        int avgSecondsPerSprint = calculateAverage(totalSeconds, numSprints);
+        int minutes = avgSecondsPerSprint / 60;
+        int seconds = avgSecondsPerSprint % 60;
+        String minuteString = String.valueOf(minutes);
+        String secondString = String.format("%02d", seconds);
+        return new Analytic("Average Sprint Time", minuteString + ":" + secondString);
     }
 
     private int getWordsPerMinute(String selectedProjectId) {
@@ -294,6 +286,58 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             wordsPerMinute = (int) (totalWords / totalTimeMinutes);
         }
         return wordsPerMinute;
+    }
+
+    public Analytic getTotalWordCountAnalyticForProject(String projectId) {
+        Cursor cursor = getReadableDatabase().query(PROJECTS_STATS_TABLE,
+                new String[]{KEY_TOTAL_WORDS},
+                KEY_PROJECT_ID + "=?",
+                new String[]{projectId},
+                null, null, null);
+        Analytic wordCountAnalytic = new Analytic("Total Words", "0 words");
+        if (cursor.moveToNext()) {
+            wordCountAnalytic = new Analytic("Total Words", cursor.getInt(cursor.getColumnIndex(KEY_TOTAL_WORDS)) + " words");
+        }
+        cursor.close();
+        return wordCountAnalytic;
+    }
+
+    public Analytic getTotalTimeAnalyticForProject(String projectId) {
+        Cursor cursor = getReadableDatabase().query(PROJECTS_STATS_TABLE,
+                new String[]{KEY_TOTAL_TIME},
+                KEY_PROJECT_ID + "=?",
+                new String[]{projectId},
+                null, null, null);
+        Analytic wordCountAnalytic = new Analytic("Total Time", "0:00");
+        if (cursor.moveToNext()) {
+            int totalSeconds = cursor.getInt(cursor.getColumnIndex(KEY_TOTAL_TIME));
+            int minutes = totalSeconds / 60;
+            int seconds = totalSeconds % 60;
+            String minuteString = String.valueOf(minutes);
+            String secondString = String.format("%02d", seconds);
+            wordCountAnalytic = new Analytic("Total Time", minuteString + ":" + secondString);
+        }
+        cursor.close();
+        return wordCountAnalytic;
+    }
+
+    public Analytic getTotalUnfocusedTimeAnalyticForProject(String projectId) {
+        Cursor cursor = getReadableDatabase().query(PROJECTS_STATS_TABLE,
+                new String[]{KEY_TOTAL_UNFOCUSED_TIME},
+                KEY_PROJECT_ID + "=?",
+                new String[]{projectId},
+                null, null, null);
+        Analytic wordCountAnalytic = new Analytic("Total Unfocused Time", "0:00");
+        if (cursor.moveToNext()) {
+            int totalSeconds = cursor.getInt(cursor.getColumnIndex(KEY_TOTAL_UNFOCUSED_TIME));
+            int minutes = totalSeconds / 60;
+            int seconds = totalSeconds % 60;
+            String minuteString = String.valueOf(minutes);
+            String secondString = String.format("%02d", seconds);
+            wordCountAnalytic = new Analytic("Total Unfocused Time", minuteString + ":" + secondString);
+        }
+        cursor.close();
+        return wordCountAnalytic;
     }
 
     private int calculateAverage(int sum, int numOfOccurrences) {

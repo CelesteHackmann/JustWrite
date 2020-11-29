@@ -45,7 +45,6 @@ public class DatabaseTests {
         db.insertProjectStats(projectId);
         projectId = String.valueOf(db.insertProject("Project 3", "Teen Fiction"));
         db.insertProjectStats(projectId);
-        System.out.println(db.getProjectList());
     }
 
     @After
@@ -109,5 +108,92 @@ public class DatabaseTests {
         expectedList.add(projectAdult2);
         expectedList.add(projectTeenFiction3);
         assertEquals(expectedList, result);
+    }
+
+    @Test
+    public void updateProjectStats_updateFromEmptyTable() {
+        String projectId = projectYoungAdult1.getId();
+        db.updateProjectStats(600, 15, 400, projectId);
+        assertEquals(600, db.getTotalTime(projectId));
+        assertEquals(15, db.getTotalUnfocusedTime(projectId));
+        assertEquals(400, db.getTotalWordCount(projectId));
+    }
+
+    @Test
+    public void updateProjectStats_updateMultipleTimesOneProject() {
+        String projectId = projectYoungAdult1.getId();
+        updateProjectStatsThreeTimesForProject(projectId);
+        assertEquals(910, db.getTotalTime(projectId));
+        assertEquals(34, db.getTotalUnfocusedTime(projectId));
+        assertEquals(559, db.getTotalWordCount(projectId));
+    }
+
+    @Test
+    public void analyticGetters_getTotalWordsAnalytic() {
+        String projectId = projectYoungAdult1.getId();
+        updateProjectStatsThreeTimesForProject(projectId);
+        Analytic totalWordsAnalytic = db.getTotalWordCountAnalyticForProject(projectId);
+        Analytic expected = new Analytic("Total Words", "559 words");
+        assertEquals(expected, totalWordsAnalytic);
+    }
+
+    @Test
+    public void analyticGetters_getTotalTimeAnalytic() {
+        String projectId = projectYoungAdult1.getId();
+        updateProjectStatsThreeTimesForProject(projectId);
+        Analytic totalTimeAnalytic = db.getTotalTimeAnalyticForProject(projectId);
+        Analytic expected = new Analytic("Total Time", "15:10");
+        assertEquals(expected, totalTimeAnalytic);
+    }
+
+    @Test
+    public void analyticGetters_getTotalUnfocusedTimeAnalytic() {
+        String projectId = projectAdult2.getId();
+        updateProjectStatsThreeTimesForProject(projectId);
+        Analytic totalUnfocusedTimeAnalytic = db.getTotalUnfocusedTimeAnalyticForProject(projectId);
+        Analytic expected = new Analytic("Total Unfocused Time", "0:34");
+        assertEquals(expected, totalUnfocusedTimeAnalytic);
+    }
+
+    @Test
+    public void analyticGetters_getWordsPerMinuteAnalytic() {
+        String projectId = projectTeenFiction3.getId();
+        updateProjectStatsThreeTimesForProject(projectId);
+        Analytic wordsPerMinAnalytic = db.getWordsPerMinuteAnalyticForProject(projectId);
+        Analytic expected = new Analytic("Average Words Per Minute", "36 words");
+        assertEquals(expected, wordsPerMinAnalytic);
+    }
+
+    @Test
+    public void analyticGetters_getWordsPer30MinutesAnalytic() {
+        String projectId = projectTeenFiction3.getId();
+        updateProjectStatsThreeTimesForProject(projectId);
+        Analytic wordsPer30MinAnalytic = db.getAverageWordsPer30MinAnalyticForProject(projectId);
+        Analytic expected = new Analytic("Average Words Per 30 Minutes", "1080 words");
+        assertEquals(expected, wordsPer30MinAnalytic);
+    }
+
+    @Test
+    public void analyticGetters_getAverageWordsPerSprintAnalytic() {
+        String projectId = projectTeenFiction3.getId();
+        updateProjectStatsThreeTimesForProject(projectId);
+        Analytic avgWordsPerSprint = db.getAverageWordsPerSprintForProject(projectId);
+        Analytic expected = new Analytic("Average Words Per Sprint", "186 words");
+        assertEquals(expected, avgWordsPerSprint);
+    }
+
+    @Test
+    public void analyticGetters_getAverageSprintTimeAnalytic() {
+        String projectId = projectTeenFiction3.getId();
+        updateProjectStatsThreeTimesForProject(projectId);
+        Analytic avgSprintTime = db.getAverageSprintTimeForProject(projectId);
+        Analytic expected = new Analytic("Average Sprint Time", "5:03");
+        assertEquals(expected, avgSprintTime);
+    }
+
+    private void updateProjectStatsThreeTimesForProject(String projectId) {
+        db.updateProjectStats(500, 24, 123, projectId);
+        db.updateProjectStats(150, 0, 200, projectId);
+        db.updateProjectStats(260, 10, 236, projectId);
     }
 }

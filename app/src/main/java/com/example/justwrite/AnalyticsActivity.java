@@ -45,7 +45,11 @@ public class AnalyticsActivity extends BaseActivity {
                 // GET BASIC STATS FOR THAT PROJECT
                 Project selectedProject = (Project) mSpinnerProjects.getSelectedItem();
                 String selectedProjectId = String.valueOf(selectedProject.getId());
-                LinkedList<Analytic> analyticsList = mDB.getBasicAnalyticsList(selectedProjectId);
+                LinkedList<Analytic> analyticsList = new LinkedList<>();
+                analyticsList.add(mDB.getTotalWordCountAnalyticForProject(selectedProjectId));
+                analyticsList.add(mDB.getTotalTimeAnalyticForProject(selectedProjectId));
+                analyticsList.add(mDB.getTotalUnfocusedTimeAnalyticForProject(selectedProjectId));
+
 
                 // GET ADVANCED STATS FOR THAT PROJECT
                 analyticsList.add(mDB.getWordsPerMinuteAnalyticForProject(selectedProjectId));
