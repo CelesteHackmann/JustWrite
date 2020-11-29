@@ -9,17 +9,17 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 public class SprintClassTests {
-    Date time1 = new Date(1606500630);
-    Date time2 = new Date(1606407315);
+    final Date time1 = new Date(1606500630);
+    final Date time2 = new Date(1606407315);
 
-    private Sprint sprint = new Sprint(1200, 0, 800, time1);
-    private Sprint sprintLong = new Sprint(2450, 15, 1000, time1);
-    private Sprint sprintDifferentTime = new Sprint(1200, 0, 800, time2);
+    private final Sprint sprint = new Sprint(1200, 0, 800, time1.toString());
+    private final Sprint sprintLong = new Sprint(2450, 15, 1000, time1.toString());
+    private final Sprint sprintDifferentTime = new Sprint(1200, 0, 800, time2.toString());
 
     @Test
     public void constructorAndGetters() {
         Date timestamp = Calendar.getInstance().getTime();
-        Sprint sprint = new Sprint(600, 10, 250, timestamp);
+        Sprint sprint = new Sprint(600, 10, 250, timestamp.toString());
         assertEquals(600, sprint.getSprintTimeSeconds());
         assertEquals(10, sprint.getUnfocusedSeconds());
         assertEquals(250, sprint.getWordCount());

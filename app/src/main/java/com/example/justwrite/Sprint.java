@@ -5,7 +5,6 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
-import java.util.Date;
 import java.util.Objects;
 
 public class Sprint implements Parcelable {
@@ -14,21 +13,12 @@ public class Sprint implements Parcelable {
     private final int mWordCount;
     private final String mTimestamp;
 
-
-    public Sprint(int numInSeconds, int unfocusedTime, int wordCount, Date timestamp) {
-        mSprintTimeSeconds = numInSeconds;
-        mUnfocusedSeconds = unfocusedTime;
-        mWordCount = wordCount;
-        mTimestamp = timestamp.toString();
-    }
-
     public Sprint(int numInSeconds, int unfocusedTime, int wordCount, String timestamp) {
         mSprintTimeSeconds = numInSeconds;
         mUnfocusedSeconds = unfocusedTime;
         mWordCount = wordCount;
         mTimestamp = timestamp;
     }
-
 
     @NonNull
     @Override

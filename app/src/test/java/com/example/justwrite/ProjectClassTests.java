@@ -6,11 +6,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 public class ProjectClassTests {
-    private Project project1 = new Project("Project 1", "YA", "12");
-    private Project project1Equal = new Project("Project 1", "YA", "12");
-    private Project project2 = new Project("Project 2", "YA", "12");
-    private Project project3 = new Project("Project 1", "Adult", "12");
-    private Project project4 = new Project("Project 1", "YA", "13");
+    private final Project project1 = new Project("Project 1", "YA", "12");
+    private final Project project1Equal = new Project("Project 1", "YA", "12");
+    private final Project project2 = new Project("Project 2", "YA", "12");
+    private final Project project3 = new Project("Project 1", "Adult", "12");
+    private final Project project4 = new Project("Project 1", "YA", "13");
 
     @Test
     public void projectGetters() {

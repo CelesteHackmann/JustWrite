@@ -25,19 +25,18 @@ import static org.junit.Assert.assertTrue;
 
 public class DatabaseTests {
     private DatabaseHelper db;
-    private Context context;
-    private Project projectYoungAdult1 = new Project("Project 1", "Young Adult", "1");
-    private Project projectAdult2 = new Project("Project 2", "Adult", "2");
-    private Project projectTeenFiction3 = new Project("Project 3", "Teen Fiction", "3");
-    Date time1 = new Date(1606500630);
+    private final Project projectYoungAdult1 = new Project("Project 1", "Young Adult", "1");
+    private final Project projectAdult2 = new Project("Project 2", "Adult", "2");
+    private final Project projectTeenFiction3 = new Project("Project 3", "Teen Fiction", "3");
+    final Date time1 = new Date(1606500630);
 
-    private Sprint sprint1 = new Sprint(1200, 0, 800, time1);
-    private Sprint sprint2 = new Sprint(2134, 321, 324, time1);
-    private Sprint sprint3 = new Sprint(1201, 10, 500, time1);
+    private final Sprint sprint1 = new Sprint(1200, 0, 800, time1.toString());
+    private final Sprint sprint2 = new Sprint(2134, 321, 324, time1.toString());
+    private final Sprint sprint3 = new Sprint(1201, 10, 500, time1.toString());
 
     @Before
     public void setUpDatabase() {
-        context = ApplicationProvider.getApplicationContext();
+        Context context = ApplicationProvider.getApplicationContext();
         db = DatabaseHelper.getInstance(context);
         String projectId = String.valueOf(db.insertProject("Project 1", "Young Adult"));
         db.insertProjectStats(projectId);
@@ -92,7 +91,7 @@ public class DatabaseTests {
         db.addSprint(sprint1, projectAdult2.getId());
         db.addSprint(sprint2, projectAdult2.getId());
         db.addSprint(sprint3, projectAdult2.getId());
-        LinkedList result = db.getSprintsForProject(String.valueOf(projectAdult2.getId()));
+        LinkedList<Sprint> result = db.getSprintsForProject(String.valueOf(projectAdult2.getId()));
         assertEquals(expectedList, result);
     }
 

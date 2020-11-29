@@ -25,10 +25,6 @@ public class Project implements Parcelable {
         return mTitle;
     }
 
-    public String toFullString() {
-        return "Title: " + mTitle + "\nGenre: " + mGenre;
-    }
-
     public String getTitle() {
         return mTitle;
     }
@@ -52,7 +48,7 @@ public class Project implements Parcelable {
     @Override
     public boolean equals(@Nullable Object obj) {
         if (this == obj) { return true; }
-        if (obj == null || getClass() != obj.getClass()) { return false; };
+        if (obj == null || getClass() != obj.getClass()) { return false; }
         Project project = (Project) obj;
         if (this == project) {
             return true;

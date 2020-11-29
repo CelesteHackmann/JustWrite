@@ -97,7 +97,7 @@ public class MainActivity extends BaseActivity {
                 int unfocusedTime = data.getIntExtra("unfocused time", 0);
                 int wordCount = data.getIntExtra("words written", 0);
                 Date sprintDate = (Date) data.getSerializableExtra("sprint date");
-                Sprint sprint = new Sprint(sprintTime, unfocusedTime, wordCount, sprintDate);
+                Sprint sprint = new Sprint(sprintTime, unfocusedTime, wordCount, sprintDate.toString());
                 mDB.addSprint(sprint, String.valueOf(currentProjectId));
                 mDB.updateProjectStats(sprintTime, unfocusedTime, wordCount, currentProjectId);
             }

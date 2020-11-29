@@ -46,7 +46,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // SPRINTS Table Create Statement
     public static final String CREATE_TABLE_SPRINTS = "CREATE TABLE " + SPRINTS_TABLE
             + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_SPRINT_TIME + " INTEGER,"
-            + KEY_UNFOCUSED_TIME + " INTEGER," + KEY_WORD_COUNT + " INTEGER," + KEY_SPRINT_DATE + " STRING,"
+            + KEY_UNFOCUSED_TIME + " INTEGER," + KEY_WORD_COUNT + " INTEGER," + KEY_SPRINT_DATE + " TEXT,"
             + KEY_PROJECT_ID + " INTEGER)";
 
     // PROJECT STATS Table Create Statement
@@ -83,7 +83,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues projectValues = new ContentValues();
         projectValues.put(KEY_TITLE, pName);
         projectValues.put(KEY_GENRE, pGenre);
-        Long projectId = db.insert(PROJECTS_TABLE, null, projectValues);
+        long projectId = db.insert(PROJECTS_TABLE, null, projectValues);
         db.close();
         return projectId;
     }
