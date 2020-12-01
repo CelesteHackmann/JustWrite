@@ -7,4 +7,10 @@
         android:title="Edit Projects"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_choose_analytics"
+        android:orderInCategory="100"
+        android:title="Choose Analytics"
+        app:showAsAction="never" />
+
 </menu>

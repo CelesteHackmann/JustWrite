@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".EditProjectsActivity"/>
+        <activity android:name=".ChooseAnalyticsActivity"></activity>
+        <activity android:name=".EditProjectsActivity" />
         <activity android:name=".AnalyticsActivity" />
         <activity android:name=".SprintHistory" />
         <activity android:name=".Countdown" />

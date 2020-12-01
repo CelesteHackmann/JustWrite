@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="8dp"
+    android:orientation="vertical"
+    tools:context=".ChooseAnalyticsActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textBasicList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Basic Analytics" />
+
+            <CheckBox
+                android:id="@+id/checkBoxWordCount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Total Word Count" />
+
+            <CheckBox
+                android:id="@+id/checkBoxTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Total Time" />
+
+            <CheckBox
+                android:id="@+id/checkBoxUnfocusedTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Total Unfocused Time" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/AdvancedAnalyticGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textAdvancedAnalytics"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Advanced Analytics" />
+
+            <CheckBox
+                android:id="@+id/checkBoxWordsPerMin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Words Per Minute" />
+
+            <CheckBox
+                android:id="@+id/checkBoxWordsPer30Min"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Words Per 30 Minutes" />
+
+            <CheckBox
+                android:id="@+id/checkBoxWordsPerSprint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Average Words Per Sprint" />
+
+            <CheckBox
+                android:id="@+id/checkBoxAvgSprintTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Average Sprint Time" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/buttonSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:onClick="savePreferences"/>
+
+
+</LinearLayout>
