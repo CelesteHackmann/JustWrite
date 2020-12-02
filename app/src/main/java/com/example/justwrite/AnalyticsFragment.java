@@ -2,25 +2,31 @@ package com.example.justwrite;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class AnalyticsActivity extends BaseActivity {
+import static android.content.Context.MODE_PRIVATE;
+
+public class AnalyticsFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private AnalyticListAdapter mAdapter;
     private Spinner mSpinnerProjects;
     private DatabaseHelper mDB;
     private TextView mProjectName;
     private SharedPreferences mSharedPreferences;
+    private View mView;
     private String sharedPrefFile = "com.example.justwrite";
 
     private static final String KEY_WORD_COUNT = "Word Count";
@@ -31,25 +37,30 @@ public class AnalyticsActivity extends BaseActivity {
     private static final String KEY_WORDS_PER_SPRINT = "Words Per Sprint";
     private static final String KEY_AVG_SPRINT_TIME = "Time Per Sprint";
 
+    public AnalyticsFragment() {
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_history_and_analytics);
-        mDB = DatabaseHelper.getInstance(this);
-        mSharedPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
-        mProjectName = findViewById(R.id.selected_project_name);
-        mProjectName.setText(R.string.no_project_to_show_string);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,  Bundle savedInstanceState) {
+        mView = inflater.inflate(R.layout.fragment_history_and_analytics, container, false);
+        mDB = DatabaseHelper.getInstance(getActivity());
+        mSharedPreferences = getActivity().getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
+        mProjectName = mView.findViewById(R.id.selected_project_name);
 
         ArrayList<Project> projects = mDB.getProjectList();
-        if (projects != null) {
+        if (projects.size() > 0) {
             setupProjectSpinner(projects);
         }
+        else {
+            mProjectName.setText(R.string.no_project_to_show_string);
+        }
+        return mView;
     }
 
     private void setupProjectSpinner(ArrayList<Project> projects) {
-        ArrayAdapter<Project> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, projects);
+        ArrayAdapter<Project> arrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, projects);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpinnerProjects = findViewById(R.id.selectProject);
+        mSpinnerProjects = mView.findViewById(R.id.selectProject);
         mSpinnerProjects.setAdapter(arrayAdapter);
         mSpinnerProjects.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -60,10 +71,10 @@ public class AnalyticsActivity extends BaseActivity {
                 LinkedList<Analytic> analyticsList = restoreAnalyticPreferences(selectedProjectId);
 
                 // POPULATE RECYCLER VIEW
-                mRecyclerView = findViewById(R.id.LogRecyclerView);
-                mAdapter = new AnalyticListAdapter(getApplicationContext(), analyticsList);
+                mRecyclerView = mView.findViewById(R.id.LogRecyclerView);
+                mAdapter = new AnalyticListAdapter(getContext(), analyticsList);
                 mRecyclerView.setAdapter(mAdapter);
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 mProjectName.setText(selectedProject.getTitle());
             }
             @Override
@@ -73,7 +84,7 @@ public class AnalyticsActivity extends BaseActivity {
     }
 
     private LinkedList<Analytic> restoreAnalyticPreferences(String selectedProjectId) {
-        mSharedPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
+        mSharedPreferences = getActivity().getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
         LinkedList<Analytic> analyticsList = new LinkedList<>();
         if (mSharedPreferences.getBoolean(KEY_WORD_COUNT, true)) {
             analyticsList.add(mDB.getTotalWordCountAnalyticForProject(selectedProjectId));

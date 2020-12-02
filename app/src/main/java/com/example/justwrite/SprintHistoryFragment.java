@@ -1,44 +1,53 @@
 package com.example.justwrite;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class SprintHistory extends BaseActivity {
+public class SprintHistoryFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private SprintListAdapter mAdapter;
     private Spinner mSpinnerProjects;
     private TextView mProjectName;
     private DatabaseHelper mDB;
+    private View mView;
+
+    public SprintHistoryFragment() {
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_history_and_analytics);
-        mDB = DatabaseHelper.getInstance(this);
-        mProjectName = findViewById(R.id.selected_project_name);
-        mProjectName.setText(R.string.no_project_to_show_string);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)  {
+        mView = inflater.inflate(R.layout.fragment_history_and_analytics, container, false);
+        mDB = DatabaseHelper.getInstance(getContext());
+        mProjectName = mView.findViewById(R.id.selected_project_name);
 
         ArrayList<Project> projects = mDB.getProjectList();
-        if (projects != null) {
+        if (projects.size() > 0) {
             setupProjectSpinner(projects);
         }
+        else {
+            mProjectName.setText(R.string.no_project_to_show_string);
+        }
+        return mView;
     }
 
     private void setupProjectSpinner(ArrayList<Project> projects) {
-        ArrayAdapter<Project> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, projects);
+        ArrayAdapter<Project> arrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, projects);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpinnerProjects = findViewById(R.id.selectProject);
+        mSpinnerProjects = mView.findViewById(R.id.selectProject);
         mSpinnerProjects.setAdapter(arrayAdapter);
         mSpinnerProjects.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -49,10 +58,10 @@ public class SprintHistory extends BaseActivity {
                 LinkedList<Sprint> sprintList = mDB.getSprintsForProject(selectedProjectId);
 
                 // POPULATE RECYCLER VIEW
-                mRecyclerView = findViewById(R.id.LogRecyclerView);
-                mAdapter = new SprintListAdapter(getApplicationContext(), sprintList);
+                mRecyclerView = mView.findViewById(R.id.LogRecyclerView);
+                mAdapter = new SprintListAdapter(getContext(), sprintList);
                 mRecyclerView.setAdapter(mAdapter);
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 mProjectName.setText(selectedProject.getTitle());
             }
             @Override

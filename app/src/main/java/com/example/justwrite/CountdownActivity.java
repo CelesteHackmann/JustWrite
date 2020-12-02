@@ -13,7 +13,6 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -25,7 +24,7 @@ import androidx.core.app.NotificationCompat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Countdown extends AppCompatActivity {
+public class CountdownActivity extends AppCompatActivity {
     TextView mTimerText;
     CountDownTimer mTimer;
     KeyguardManager myKM;
@@ -75,7 +74,7 @@ public class Countdown extends AppCompatActivity {
             @Override
             public void onFinish () {
                 displayTimerFinishedNotification();
-                LayoutInflater inflater = LayoutInflater.from(Countdown.this);
+                LayoutInflater inflater = LayoutInflater.from(CountdownActivity.this);
                 final View layout = inflater.inflate(R.layout.sprint_finished, null);
                 final EditText wordsWrittenText = layout.findViewById(R.id.editTextNumber);
                 alert = getFinishedAlert(layout, wordsWrittenText, numInSeconds);
@@ -113,7 +112,7 @@ public class Countdown extends AppCompatActivity {
     }
 
     private AlertDialog getFinishedAlert(View layout, final EditText wordsWrittenText, final int numInSeconds) {
-        return new AlertDialog.Builder(Countdown.this).setTitle("Congratulations")
+        return new AlertDialog.Builder(CountdownActivity.this).setTitle("Congratulations")
                 .setView(layout)
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
@@ -137,7 +136,7 @@ public class Countdown extends AppCompatActivity {
     }
 
     private AlertDialog getCancelAlert() {
-        return new AlertDialog.Builder(Countdown.this).setTitle("End Sprint")
+        return new AlertDialog.Builder(CountdownActivity.this).setTitle("End Sprint")
                 .setMessage(R.string.cancelSprintMessage)
                 .setPositiveButton("End Sprint", new DialogInterface.OnClickListener() {
                     @Override
@@ -198,7 +197,7 @@ public class Countdown extends AppCompatActivity {
     }
 
     private PendingIntent getReturnToAppIntent(int sprintFinishedNotificationId) {
-        Intent returnToAppIntent = new Intent(this, Countdown.class);
+        Intent returnToAppIntent = new Intent(this, CountdownActivity.class);
         returnToAppIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         return PendingIntent.getActivity(this,
                 sprintFinishedNotificationId, returnToAppIntent, PendingIntent.FLAG_CANCEL_CURRENT);
@@ -213,7 +212,6 @@ public class Countdown extends AppCompatActivity {
             public void run() {
                 if (!myKM.isKeyguardLocked()){
                     appInFocus = false;
-                    Log.d("APP_FOCUS", "false");
                 }
             }
         }, 5000);
@@ -225,7 +223,6 @@ public class Countdown extends AppCompatActivity {
         appInFocus = true;
         notificationDisplayed = false;
         mNotifyManager.cancelAll();
-        Log.d("APP_FOCUS", "true");
     }
 
     @Override

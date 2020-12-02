@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_timer_setup"
+        android:icon="@drawable/ic_timer_setup"
+        android:title="@string/title_setup_timer" />
+
+    <item
+        android:id="@+id/navigation_sprint_history"
+        android:icon="@drawable/ic_sprint_history"
+        android:title="@string/title_sprint_history" />
+
+    <item
+        android:id="@+id/navigation_analytics"
+        android:icon="@drawable/ic_analytics"
+        android:title="@string/title_analytics" />
+
+</menu>

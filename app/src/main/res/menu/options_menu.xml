@@ -4,13 +4,13 @@
     <item
         android:id="@+id/action_edit_projects"
         android:orderInCategory="100"
-        android:title="Edit Projects"
+        android:title="@string/edit_projects_item"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_choose_analytics"
         android:orderInCategory="100"
-        android:title="Choose Analytics"
+        android:title="@string/choose_analytics_item"
         app:showAsAction="never" />
 
 </menu>

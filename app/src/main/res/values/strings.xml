@@ -14,4 +14,9 @@
     <string name="genre_hint">Genre</string>
     <string name="words_written_text">Words Written</string>
     <string name="no_project_to_show_string">No Project Data To Show</string>
+    <string name="edit_projects_item">Edit Projects</string>
+    <string name="choose_analytics_item">Choose Analytics</string>
+    <string name="title_setup_timer">Timer</string>
+    <string name="title_sprint_history">History</string>
+    <string name="title_analytics">Analytics</string>
 </resources>

@@ -9,11 +9,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ChooseAnalyticsActivity"></activity>
-        <activity android:name=".EditProjectsActivity" />
-        <activity android:name=".AnalyticsActivity" />
-        <activity android:name=".SprintHistory" />
-        <activity android:name=".Countdown" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,6 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".EditProjectsActivity" />
+        <activity android:name=".ChooseAnalyticsActivity"/>
+        <activity android:name=".CountdownActivity" />
     </application>
 
 </manifest>
