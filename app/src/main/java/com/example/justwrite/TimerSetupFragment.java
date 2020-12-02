@@ -17,6 +17,8 @@ import android.widget.Spinner;
 
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -47,25 +49,10 @@ public class TimerSetupFragment extends Fragment {
         mDB = DatabaseHelper.getInstance(getActivity());
         setupNumberPickers();
         setUpProjectSpinner();
-        mView.findViewById(R.id.startButton).setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton fab = mView.findViewById(R.id.createProjectFAB);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                if (mSpinnerProjects.getSelectedItem() == defaultProjectAndId) {
-                    mSpinnerProjects.getSelectedView().setBackgroundResource(R.color.warningColor);
-                }
-                else {
-                    int minutes = mMinuteText.getValue();
-                    int seconds = mSecondText.getValue();
-                    Intent intent = new Intent(getContext(), CountdownActivity.class);
-                    intent.putExtra("minutes", minutes);
-                    intent.putExtra("seconds", seconds);
-                    startActivityForResult(intent, RESULT_SPRINT_OVER);
-                }
-            }
-        });
-        mView.findViewById(R.id.buttonCreateProject).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 LayoutInflater inflater = LayoutInflater.from(getContext());
                 final View layout = inflater.inflate(R.layout.create_project_dialog, null);
                 final EditText projectName = layout.findViewById(R.id.editProjectName);
@@ -82,17 +69,32 @@ public class TimerSetupFragment extends Fragment {
                             alert.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
                         }
                     }
-
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                     }
-
                     @Override
                     public void afterTextChanged(Editable s) {
                     }
                 });
                 alert.show();
                 alert.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+            }
+        });
+
+        mView.findViewById(R.id.startButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mSpinnerProjects.getSelectedItem() == defaultProjectAndId) {
+                    mSpinnerProjects.getSelectedView().setBackgroundResource(R.color.warningColor);
+                }
+                else {
+                    int minutes = mMinuteText.getValue();
+                    int seconds = mSecondText.getValue();
+                    Intent intent = new Intent(getContext(), CountdownActivity.class);
+                    intent.putExtra("minutes", minutes);
+                    intent.putExtra("seconds", seconds);
+                    startActivityForResult(intent, RESULT_SPRINT_OVER);
+                }
             }
         });
         return mView;
