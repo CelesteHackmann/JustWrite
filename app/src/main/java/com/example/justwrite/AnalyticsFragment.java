@@ -27,7 +27,6 @@ public class AnalyticsFragment extends Fragment {
     private TextView mProjectName;
     private SharedPreferences mSharedPreferences;
     private View mView;
-    private String sharedPrefFile = "com.example.justwrite";
 
     private static final String KEY_WORD_COUNT = "Word Count";
     private static final String KEY_TIME = "Time";
@@ -44,7 +43,7 @@ public class AnalyticsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,  Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_history_and_analytics, container, false);
         mDB = DatabaseHelper.getInstance(getActivity());
-        mSharedPreferences = getActivity().getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
+        mSharedPreferences = getActivity().getSharedPreferences(getString(R.string.sharedPrefFileName), MODE_PRIVATE);
         mProjectName = mView.findViewById(R.id.selected_project_name);
 
         ArrayList<Project> projects = mDB.getProjectList();
@@ -84,7 +83,6 @@ public class AnalyticsFragment extends Fragment {
     }
 
     private LinkedList<Analytic> restoreAnalyticPreferences(String selectedProjectId) {
-        mSharedPreferences = getActivity().getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
         LinkedList<Analytic> analyticsList = new LinkedList<>();
         if (mSharedPreferences.getBoolean(KEY_WORD_COUNT, true)) {
             analyticsList.add(mDB.getTotalWordCountAnalyticForProject(selectedProjectId));

@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class ChooseAnalyticsActivity extends AppCompatActivity {
     private SharedPreferences mSharedPreferences;
-    private String sharedPrefFile = "com.example.justwrite";
 
     CheckBox wordCountCheckbox;
     CheckBox sprintTimeCheckbox;
@@ -32,7 +31,7 @@ public class ChooseAnalyticsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_analytics);
 
-        mSharedPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
+        mSharedPreferences = getSharedPreferences(getString(R.string.sharedPrefFileName), MODE_PRIVATE);
         assignCheckboxItems();
         setUpCheckboxes();
     }

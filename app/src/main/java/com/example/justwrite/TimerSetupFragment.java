@@ -49,37 +49,7 @@ public class TimerSetupFragment extends Fragment {
         mDB = DatabaseHelper.getInstance(getActivity());
         setupNumberPickers();
         setUpProjectSpinner();
-        FloatingActionButton fab = mView.findViewById(R.id.createProjectFAB);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                LayoutInflater inflater = LayoutInflater.from(getContext());
-                final View layout = inflater.inflate(R.layout.create_project_dialog, null);
-                final EditText projectName = layout.findViewById(R.id.editProjectName);
-                final EditText projectGenre = layout.findViewById(R.id.editGenre);
-
-                final AlertDialog alert = getCreateProjectDialog(layout, projectName, projectGenre);
-                projectName.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        if (s.length() > 0) {
-                            alert.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-                        }
-                        else {
-                            alert.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-                        }
-                    }
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    }
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                    }
-                });
-                alert.show();
-                alert.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-            }
-        });
+        setupFloatingActionButton();
 
         mView.findViewById(R.id.startButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,6 +132,40 @@ public class TimerSetupFragment extends Fragment {
         });
     }
 
+    private void setupFloatingActionButton() {
+        FloatingActionButton fab = mView.findViewById(R.id.createProjectFAB);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LayoutInflater inflater = LayoutInflater.from(getContext());
+                final View layout = inflater.inflate(R.layout.create_project_dialog, null);
+                final EditText projectName = layout.findViewById(R.id.editProjectName);
+                final EditText projectGenre = layout.findViewById(R.id.editGenre);
+
+                final AlertDialog alert = getCreateProjectDialog(layout, projectName, projectGenre);
+                projectName.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (s.length() > 0) {
+                            alert.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                        }
+                        else {
+                            alert.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                        }
+                    }
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                    }
+                });
+                alert.show();
+                alert.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+            }
+        });
+    }
+
     private AlertDialog getCreateProjectDialog(View layout, final EditText projectName, final EditText projectGenre) {
         return new AlertDialog.Builder(getContext())
                 .setTitle("Create a New Project")
@@ -177,12 +181,4 @@ public class TimerSetupFragment extends Fragment {
                 .setCancelable(true)
                 .create();
     }
-
-//    private void hideKeyboard() {
-//        View view = this.getCurrentFocus();
-//        if (view != null) {
-//            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-//            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-//        }
-//    }
 }
