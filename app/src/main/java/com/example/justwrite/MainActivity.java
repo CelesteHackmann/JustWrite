@@ -14,11 +14,13 @@ import androidx.fragment.app.FragmentManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
+    private static final int RESULT_PROJECTS_EDITED = 1;
+    private static final int RESULT_NEW_ANALYTICS_CHOSEN = 2;
     BottomNavigationView bottomNavigationView;
 
-    final Fragment fragmentTimerSetup = new TimerSetupFragment();
-    final Fragment fragmentSprintHistory = new SprintHistoryFragment();
-    final Fragment fragmentAnalytics = new AnalyticsFragment();
+    final TimerSetupFragment fragmentTimerSetup = new TimerSetupFragment();
+    final SprintHistoryFragment fragmentSprintHistory = new SprintHistoryFragment();
+    final AnalyticsFragment fragmentAnalytics = new AnalyticsFragment();
     final FragmentManager fragmentManager = getSupportFragmentManager();
     Fragment activeFragment;
 
@@ -66,14 +68,28 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_edit_projects:
                 intent = new Intent(this, EditProjectsActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, RESULT_PROJECTS_EDITED);
                 return true;
             case R.id.action_choose_analytics:
                 intent = new Intent(this, ChooseAnalyticsActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, RESULT_NEW_ANALYTICS_CHOSEN);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK) {
+            if (requestCode == RESULT_PROJECTS_EDITED) {
+                getSupportFragmentManager().beginTransaction().detach(activeFragment).attach(activeFragment).commit();
+            }
+            if (requestCode == RESULT_NEW_ANALYTICS_CHOSEN) {
+                if (activeFragment == fragmentAnalytics) {
+                    getSupportFragmentManager().beginTransaction().detach(activeFragment).attach(activeFragment).commit();
+                }
+            }
         }
     }
 }

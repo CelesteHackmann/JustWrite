@@ -27,6 +27,7 @@ public class AnalyticsFragment extends Fragment {
     private TextView mProjectName;
     private SharedPreferences mSharedPreferences;
     private View mView;
+    ArrayList<Project> projects;
 
     private static final String KEY_WORD_COUNT = "Word Count";
     private static final String KEY_TIME = "Time";
@@ -46,7 +47,7 @@ public class AnalyticsFragment extends Fragment {
         mSharedPreferences = getActivity().getSharedPreferences(getString(R.string.sharedPrefFileName), MODE_PRIVATE);
         mProjectName = mView.findViewById(R.id.selected_project_name);
 
-        ArrayList<Project> projects = mDB.getProjectList();
+        projects = mDB.getProjectList();
         if (projects.size() > 0) {
             setupProjectSpinner(projects);
         }

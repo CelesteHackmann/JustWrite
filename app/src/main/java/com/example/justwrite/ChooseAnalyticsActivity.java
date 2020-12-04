@@ -1,11 +1,13 @@
 package com.example.justwrite;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class ChooseAnalyticsActivity extends AppCompatActivity {
@@ -68,5 +70,18 @@ public class ChooseAnalyticsActivity extends AppCompatActivity {
         editor.putBoolean(KEY_AVG_SPRINT_TIME, avgSprintTimeCheckbox.isChecked());
         editor.apply();
         Toast.makeText(this, "Analytic Preferences Saved!", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void supportNavigateUpTo(@NonNull Intent upIntent) {
+        setResult(RESULT_OK, upIntent);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        setResult(RESULT_OK, intent);
+        finish();
     }
 }

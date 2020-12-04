@@ -24,6 +24,8 @@ public class SprintHistoryFragment extends Fragment {
     private TextView mProjectName;
     private DatabaseHelper mDB;
     private View mView;
+    ArrayList<Project> projects;
+
 
     public SprintHistoryFragment() {
     }
@@ -34,7 +36,7 @@ public class SprintHistoryFragment extends Fragment {
         mDB = DatabaseHelper.getInstance(getContext());
         mProjectName = mView.findViewById(R.id.selected_project_name);
 
-        ArrayList<Project> projects = mDB.getProjectList();
+        projects = mDB.getProjectList();
         if (projects.size() > 0) {
             setupProjectSpinner(projects);
         }
