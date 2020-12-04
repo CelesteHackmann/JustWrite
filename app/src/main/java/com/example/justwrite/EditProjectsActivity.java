@@ -30,6 +30,8 @@ public class EditProjectsActivity extends AppCompatActivity {
 
     @Override
     public void supportNavigateUpTo(@NonNull Intent upIntent) {
+        boolean changesMade = mAdapter.projectsUpdated();
+        upIntent.putExtra("Changes Made", changesMade);
         setResult(RESULT_OK, upIntent);
         finish();
     }
@@ -37,6 +39,8 @@ public class EditProjectsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
+        boolean changesMade = mAdapter.projectsUpdated();
+        intent.putExtra("Changes Made", changesMade);
         setResult(RESULT_OK, intent);
         finish();
     }

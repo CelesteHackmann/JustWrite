@@ -22,7 +22,8 @@ public class MainActivity extends AppCompatActivity {
     final SprintHistoryFragment fragmentSprintHistory = new SprintHistoryFragment();
     final AnalyticsFragment fragmentAnalytics = new AnalyticsFragment();
     final FragmentManager fragmentManager = getSupportFragmentManager();
-    Fragment activeFragment;
+    private Fragment activeFragment;
+    private Fragment fragmentToHide;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,25 +32,32 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.nav_view);
 
         activeFragment = fragmentTimerSetup;
-        fragmentManager.beginTransaction().replace(R.id.host_fragment, activeFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.host_fragment, activeFragment).show(activeFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.host_fragment, fragmentSprintHistory).hide(fragmentSprintHistory).commit();
+        fragmentManager.beginTransaction().add(R.id.host_fragment, fragmentAnalytics).hide(fragmentAnalytics).commit();
+//        fragmentManager.beginTransaction().replace(R.id.host_fragment, activeFragment).commit();
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.navigation_timer_setup:
+                        fragmentToHide = activeFragment;
                         activeFragment = fragmentTimerSetup;
                         break;
                     case R.id.navigation_sprint_history:
+                        fragmentToHide = activeFragment;
                         activeFragment = fragmentSprintHistory;
                         break;
                     case R.id.navigation_analytics:
+                        fragmentToHide = activeFragment;
                         activeFragment = fragmentAnalytics;
                         break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + item.getItemId());
                 }
-                fragmentManager.beginTransaction().replace(R.id.host_fragment, activeFragment).commit();
+                fragmentManager.beginTransaction().hide(fragmentToHide).show(activeFragment).commit();
+//                fragmentManager.beginTransaction().replace(R.id.host_fragment, activeFragment).commit();
                 return true;
             }
         });
@@ -81,14 +89,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        boolean changesMade = data.getBooleanExtra("Changes Made", false);
         if(resultCode == RESULT_OK) {
-            if (requestCode == RESULT_PROJECTS_EDITED) {
-                getSupportFragmentManager().beginTransaction().detach(activeFragment).attach(activeFragment).commit();
+            if (requestCode == RESULT_PROJECTS_EDITED && changesMade) {
+                fragmentManager.beginTransaction().detach(activeFragment).attach(activeFragment).commit();
             }
-            if (requestCode == RESULT_NEW_ANALYTICS_CHOSEN) {
-                if (activeFragment == fragmentAnalytics) {
-                    getSupportFragmentManager().beginTransaction().detach(activeFragment).attach(activeFragment).commit();
-                }
+            if (requestCode == RESULT_NEW_ANALYTICS_CHOSEN && changesMade) {
+                fragmentManager.beginTransaction().detach(activeFragment).attach(activeFragment).commit();
             }
         }
     }

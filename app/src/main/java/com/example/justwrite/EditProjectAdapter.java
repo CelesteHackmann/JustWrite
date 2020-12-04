@@ -17,6 +17,7 @@ public class EditProjectAdapter extends RecyclerView.Adapter<EditProjectAdapter.
     private ArrayList<Project> mProjectList;
     private final LayoutInflater mInflater;
     static Context mContext;
+    public boolean changesMade;
 
     public EditProjectAdapter(Context context, ArrayList<Project> projectList) {
         mContext = context;
@@ -44,7 +45,11 @@ public class EditProjectAdapter extends RecyclerView.Adapter<EditProjectAdapter.
         return mProjectList.size();
     }
 
-    static class EditProjectViewHolder extends RecyclerView.ViewHolder{
+    public boolean projectsUpdated() {
+        return changesMade;
+    }
+
+    class EditProjectViewHolder extends RecyclerView.ViewHolder{
         public final EditText editProjectTitle;
         public final EditText editProjectGenre;
         public final Button updateProjectButton;
@@ -62,6 +67,7 @@ public class EditProjectAdapter extends RecyclerView.Adapter<EditProjectAdapter.
                     String newGenre = String.valueOf(editProjectGenre.getText());
                     DatabaseHelper db = DatabaseHelper.getInstance(mContext);
                     db.updateProjectTitleAndGenre(currentProjectId, newTitle, newGenre);
+                    changesMade = true;
                     Toast.makeText(mContext, "Project Updated!", Toast.LENGTH_SHORT).show();
                 }
             });

@@ -27,6 +27,7 @@ public class ChooseAnalyticsActivity extends AppCompatActivity {
     private static final String KEY_WORDS_PER_30_MIN = "Words Per 30 Minutes";
     private static final String KEY_WORDS_PER_SPRINT = "Words Per Sprint";
     private static final String KEY_AVG_SPRINT_TIME = "Time Per Sprint";
+    private boolean changesMade = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,11 +70,13 @@ public class ChooseAnalyticsActivity extends AppCompatActivity {
         editor.putBoolean(KEY_WORDS_PER_SPRINT, wordsPerSprintCheckbox.isChecked());
         editor.putBoolean(KEY_AVG_SPRINT_TIME, avgSprintTimeCheckbox.isChecked());
         editor.apply();
+        changesMade = true;
         Toast.makeText(this, "Analytic Preferences Saved!", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void supportNavigateUpTo(@NonNull Intent upIntent) {
+        upIntent.putExtra("Changes Made", changesMade);
         setResult(RESULT_OK, upIntent);
         finish();
     }
@@ -81,6 +84,7 @@ public class ChooseAnalyticsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
+        intent.putExtra("Changes Made", changesMade);
         setResult(RESULT_OK, intent);
         finish();
     }
