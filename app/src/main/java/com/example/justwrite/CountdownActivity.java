@@ -28,9 +28,9 @@ public class CountdownActivity extends AppCompatActivity {
     TextView mTimerText;
     CountDownTimer mTimer;
     KeyguardManager myKM;
-    private boolean appInFocus = true;
-    int mUnfocusedTime = 0;
     AlertDialog alert;
+    int mUnfocusedTime = 0;
+    private boolean appInFocus = true;
     long remainingSeconds;
     int secondsLeft;
     int minutesLeft;

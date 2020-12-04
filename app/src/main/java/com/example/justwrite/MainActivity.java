@@ -31,10 +31,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         bottomNavigationView = findViewById(R.id.nav_view);
 
-        activeFragment = fragmentTimerSetup;
-        fragmentManager.beginTransaction().add(R.id.host_fragment, activeFragment).show(activeFragment).commit();
-        fragmentManager.beginTransaction().add(R.id.host_fragment, fragmentSprintHistory).hide(fragmentSprintHistory).commit();
-        fragmentManager.beginTransaction().add(R.id.host_fragment, fragmentAnalytics).hide(fragmentAnalytics).commit();
+        setupFragmentManager();
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -89,13 +86,17 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         boolean changesMade = data.getBooleanExtra("Changes Made", false);
         if(resultCode == RESULT_OK && changesMade) {
-            if (requestCode == RESULT_PROJECTS_EDITED) {
-                fragmentManager.beginTransaction().detach(activeFragment).attach(activeFragment).commit();
-            }
-            else if (requestCode == RESULT_NEW_ANALYTICS_CHOSEN) {
+            if (requestCode == RESULT_PROJECTS_EDITED || requestCode == RESULT_NEW_ANALYTICS_CHOSEN) {
                 fragmentManager.beginTransaction().detach(activeFragment).attach(activeFragment).commit();
             }
         }
+    }
+
+    private void setupFragmentManager() {
+        activeFragment = fragmentTimerSetup;
+        fragmentManager.beginTransaction().add(R.id.host_fragment, activeFragment).show(activeFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.host_fragment, fragmentSprintHistory).hide(fragmentSprintHistory).commit();
+        fragmentManager.beginTransaction().add(R.id.host_fragment, fragmentAnalytics).hide(fragmentAnalytics).commit();
     }
 }
 
