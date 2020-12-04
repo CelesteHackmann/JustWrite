@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class EditProjectAdapter extends RecyclerView.Adapter<EditProjectAdapter.EditProjectViewHolder>{
     private ArrayList<Project> mProjectList;
     private final LayoutInflater mInflater;
-    static Context mContext;
+    Context mContext;
     public boolean changesMade;
 
     public EditProjectAdapter(Context context, ArrayList<Project> projectList) {

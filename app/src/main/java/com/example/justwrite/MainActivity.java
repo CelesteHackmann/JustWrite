@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager.beginTransaction().add(R.id.host_fragment, activeFragment).show(activeFragment).commit();
         fragmentManager.beginTransaction().add(R.id.host_fragment, fragmentSprintHistory).hide(fragmentSprintHistory).commit();
         fragmentManager.beginTransaction().add(R.id.host_fragment, fragmentAnalytics).hide(fragmentAnalytics).commit();
-//        fragmentManager.beginTransaction().replace(R.id.host_fragment, activeFragment).commit();
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -57,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
                         throw new IllegalStateException("Unexpected value: " + item.getItemId());
                 }
                 fragmentManager.beginTransaction().hide(fragmentToHide).show(activeFragment).commit();
-//                fragmentManager.beginTransaction().replace(R.id.host_fragment, activeFragment).commit();
                 return true;
             }
         });
@@ -90,11 +88,11 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         boolean changesMade = data.getBooleanExtra("Changes Made", false);
-        if(resultCode == RESULT_OK) {
-            if (requestCode == RESULT_PROJECTS_EDITED && changesMade) {
+        if(resultCode == RESULT_OK && changesMade) {
+            if (requestCode == RESULT_PROJECTS_EDITED) {
                 fragmentManager.beginTransaction().detach(activeFragment).attach(activeFragment).commit();
             }
-            if (requestCode == RESULT_NEW_ANALYTICS_CHOSEN && changesMade) {
+            else if (requestCode == RESULT_NEW_ANALYTICS_CHOSEN) {
                 fragmentManager.beginTransaction().detach(activeFragment).attach(activeFragment).commit();
             }
         }
