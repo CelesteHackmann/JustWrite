@@ -95,6 +95,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void refreshHistoryAndAnalyticsFragments() {
+        fragmentManager.beginTransaction().detach(fragmentAnalytics).attach(fragmentAnalytics).commit();
+        fragmentManager.beginTransaction().detach(fragmentSprintHistory).attach(fragmentSprintHistory).commit();
+        fragmentManager.beginTransaction().hide(fragmentSprintHistory).hide(fragmentAnalytics).commit();
+    }
+
     private void setupFragmentManager() {
         activeFragment = fragmentTimerSetup;
         fragmentManager.beginTransaction().add(R.id.host_fragment, activeFragment).show(activeFragment).commit();

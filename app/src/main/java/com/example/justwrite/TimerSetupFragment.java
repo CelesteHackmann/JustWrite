@@ -82,6 +82,12 @@ public class TimerSetupFragment extends Fragment {
                 Sprint sprint = new Sprint(sprintTime, unfocusedTime, wordCount, sprintDate.toString());
                 mDB.addSprint(sprint, String.valueOf(currentProjectId));
                 mDB.updateProjectStats(sprintTime, unfocusedTime, wordCount, currentProjectId);
+
+                // Refresh Fragments with New Data
+                if (getActivity().getClass() == MainActivity.class) {
+                    MainActivity activity = (MainActivity) getActivity();
+                    activity.refreshHistoryAndAnalyticsFragments();
+                }
             }
         }
     }
