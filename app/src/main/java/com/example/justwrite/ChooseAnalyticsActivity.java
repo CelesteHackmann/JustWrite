@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
@@ -12,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class ChooseAnalyticsActivity extends AppCompatActivity {
     private SharedPreferences mSharedPreferences;
-
+    Button saveButton;
     CheckBox wordCountCheckbox;
     CheckBox sprintTimeCheckbox;
     CheckBox unfocusedTimeCheckbox;
@@ -37,6 +38,7 @@ public class ChooseAnalyticsActivity extends AppCompatActivity {
         mSharedPreferences = getSharedPreferences(getString(R.string.sharedPrefFileName), MODE_PRIVATE);
         assignCheckboxItems();
         setUpCheckboxes();
+        setListenerForSaveButton();
     }
 
     private void assignCheckboxItems() {
@@ -49,7 +51,6 @@ public class ChooseAnalyticsActivity extends AppCompatActivity {
         avgSprintTimeCheckbox = findViewById(R.id.checkBoxAvgSprintTime);
     }
 
-
     private void setUpCheckboxes() {
         wordCountCheckbox.setChecked(mSharedPreferences.getBoolean(KEY_WORD_COUNT, true));
         sprintTimeCheckbox.setChecked(mSharedPreferences.getBoolean(KEY_TIME, true));
@@ -60,18 +61,24 @@ public class ChooseAnalyticsActivity extends AppCompatActivity {
         avgSprintTimeCheckbox.setChecked(mSharedPreferences.getBoolean(KEY_AVG_SPRINT_TIME, true));
     }
 
-    public void savePreferences(View view) {
-        SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putBoolean(KEY_WORD_COUNT, wordCountCheckbox.isChecked());
-        editor.putBoolean(KEY_TIME, sprintTimeCheckbox.isChecked());
-        editor.putBoolean(KEY_UNFOCUSED_TIME, unfocusedTimeCheckbox.isChecked());
-        editor.putBoolean(KEY_WORDS_PER_MIN, wordsPerMinCheckbox.isChecked());
-        editor.putBoolean(KEY_WORDS_PER_30_MIN, wordsPer30MinCheckbox.isChecked());
-        editor.putBoolean(KEY_WORDS_PER_SPRINT, wordsPerSprintCheckbox.isChecked());
-        editor.putBoolean(KEY_AVG_SPRINT_TIME, avgSprintTimeCheckbox.isChecked());
-        editor.apply();
-        changesMade = true;
-        Toast.makeText(this, "Analytic Preferences Saved!", Toast.LENGTH_SHORT).show();
+    private void setListenerForSaveButton() {
+        saveButton = findViewById(R.id.buttonSave);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor editor = mSharedPreferences.edit();
+                editor.putBoolean(KEY_WORD_COUNT, wordCountCheckbox.isChecked());
+                editor.putBoolean(KEY_TIME, sprintTimeCheckbox.isChecked());
+                editor.putBoolean(KEY_UNFOCUSED_TIME, unfocusedTimeCheckbox.isChecked());
+                editor.putBoolean(KEY_WORDS_PER_MIN, wordsPerMinCheckbox.isChecked());
+                editor.putBoolean(KEY_WORDS_PER_30_MIN, wordsPer30MinCheckbox.isChecked());
+                editor.putBoolean(KEY_WORDS_PER_SPRINT, wordsPerSprintCheckbox.isChecked());
+                editor.putBoolean(KEY_AVG_SPRINT_TIME, avgSprintTimeCheckbox.isChecked());
+                editor.apply();
+                changesMade = true;
+                Toast.makeText(ChooseAnalyticsActivity.this, "Analytic Preferences Saved!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

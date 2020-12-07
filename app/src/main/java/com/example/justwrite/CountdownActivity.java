@@ -15,6 +15,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -26,6 +27,7 @@ import java.util.Date;
 
 public class CountdownActivity extends AppCompatActivity {
     TextView mTimerText;
+    Button mEndSprintButton;
     CountDownTimer mTimer;
     KeyguardManager myKM;
     AlertDialog alert;
@@ -47,6 +49,7 @@ public class CountdownActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_countdown);
         mTimerText = findViewById(R.id.countdownText);
+        setListenerForEndSprintButton();
         myKM = (KeyguardManager) getApplicationContext().getSystemService(Context.KEYGUARD_SERVICE);
 
         Intent intent = getIntent();
@@ -55,6 +58,17 @@ public class CountdownActivity extends AppCompatActivity {
         startTimer(minutes, seconds);
 
         createNotificationChannel();
+    }
+
+    private void setListenerForEndSprintButton() {
+        mEndSprintButton = findViewById(R.id.endButton);
+        mEndSprintButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog alert = getCancelAlert();
+                alert.show();
+            }
+        });
     }
 
     private void startTimer(int minutes, int seconds) {
@@ -104,11 +118,6 @@ public class CountdownActivity extends AppCompatActivity {
         };
         sprintDate = Calendar.getInstance().getTime();
         mTimer.start();
-    }
-
-    public void cancelSprint(View view) {
-        AlertDialog alert = getCancelAlert();
-        alert.show();
     }
 
     private AlertDialog getFinishedAlert(View layout, final EditText wordsWrittenText, final int numInSeconds) {

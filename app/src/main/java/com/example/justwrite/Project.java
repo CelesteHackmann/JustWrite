@@ -50,9 +50,6 @@ public class Project implements Parcelable {
         if (this == obj) { return true; }
         if (obj == null || getClass() != obj.getClass()) { return false; }
         Project project = (Project) obj;
-        if (this == project) {
-            return true;
-        }
         return (mTitle.equals(project.getTitle()) &&
                 mGenre.equals(project.getGenre()) &&
                 mProjectId.equals(project.getId()));

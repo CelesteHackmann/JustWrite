@@ -10,7 +10,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:baselineAligned="false">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -19,66 +20,63 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textBasicList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Basic Analytics" />
+                android:text="@string/basic_analytics_title" />
 
             <CheckBox
                 android:id="@+id/checkBoxWordCount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Total Word Count" />
+                android:text="@string/total_word_count_text" />
 
             <CheckBox
                 android:id="@+id/checkBoxTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Total Time" />
+                android:text="@string/total_time_text" />
 
             <CheckBox
                 android:id="@+id/checkBoxUnfocusedTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Total Unfocused Time" />
+                android:text="@string/total_unfocused_time_text" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/AdvancedAnalyticGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textAdvancedAnalytics"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Advanced Analytics" />
+                android:text="@string/advanced_analytics_text" />
 
             <CheckBox
                 android:id="@+id/checkBoxWordsPerMin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Words Per Minute" />
+                android:text="@string/words_per_minute_text" />
 
             <CheckBox
                 android:id="@+id/checkBoxWordsPer30Min"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Words Per 30 Minutes" />
+                android:text="@string/words_per_30_minutes_text" />
 
             <CheckBox
                 android:id="@+id/checkBoxWordsPerSprint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Average Words Per Sprint" />
+                android:text="@string/average_words_per_sprint_text" />
 
             <CheckBox
                 android:id="@+id/checkBoxAvgSprintTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Average Sprint Time" />
+                android:text="@string/average_sprint_time_text" />
         </LinearLayout>
     </LinearLayout>
 
@@ -86,8 +84,7 @@
         android:id="@+id/buttonSave"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Save"
-        android:onClick="savePreferences"/>
+        android:text="@string/save_button_text" />
 
 
 </LinearLayout>

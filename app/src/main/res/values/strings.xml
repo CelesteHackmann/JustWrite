@@ -1,23 +1,33 @@
 <resources>
     <string name="app_name">Just Write</string>
-    <string name="end_button_text">Give Up!</string>
-    <string name="start_button_text">Start Sprint</string>
-    <string name="seconds_text">seconds</string>
-    <string name="minutes_text">minutes</string>
-    <string name="colon">:</string>
-    <string name="cancelSprintMessage">Are you sure you want to end the sprint?\nYour progress will not be counted.</string>
-    <string name="create_project_button_text">Create New Project</string>
+    <string name="sharedPrefFileName">com.example.justwrite</string>
+
+    <string name="update_project_button_text">Update Project</string>
     <string name="start_sprint_button_text">Start Sprint</string>
-    <string name="see_sprint_log_button_text">See Sprint Log</string>
-    <string name="see_project_analytics_button_text">See Project Analytics</string>
-    <string name="project_title_hint">Project Title</string>
-    <string name="genre_hint">Genre</string>
-    <string name="words_written_text">Words Written</string>
+    <string name="end_button_text">Give Up!</string>
+    <string name="save_button_text">Save</string>
+
+    <string name="cancelSprintMessage">Are you sure you want to end the sprint?\nYour progress will not be saved.</string>
     <string name="no_project_to_show_string">No Project Data To Show</string>
+    <string name="colon">:</string>
+
+    <string name="project_title_hint">Project Title</string>
+    <string name="project_genre_hint">Project Genre</string>
+    
+    <string name="words_written_text">Words Written</string>
     <string name="edit_projects_item">Edit Projects</string>
     <string name="choose_analytics_item">Choose Analytics</string>
     <string name="title_setup_timer">Timer</string>
     <string name="title_sprint_history">History</string>
+
     <string name="title_analytics">Analytics</string>
-    <string name="sharedPrefFileName">com.example.justwrite</string>
+    <string name="basic_analytics_title">Basic Analytics</string>
+    <string name="total_word_count_text">Total Word Count</string>
+    <string name="total_time_text">Total Time</string>
+    <string name="total_unfocused_time_text">Total Unfocused Time</string>
+    <string name="advanced_analytics_text">Advanced Analytics</string>
+    <string name="words_per_minute_text">Words Per Minute</string>
+    <string name="words_per_30_minutes_text">Words Per 30 Minutes</string>
+    <string name="average_words_per_sprint_text">Average Words Per Sprint</string>
+    <string name="average_sprint_time_text">Average Sprint Time</string>
 </resources>

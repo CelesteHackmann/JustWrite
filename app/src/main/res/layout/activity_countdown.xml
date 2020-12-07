@@ -6,19 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".CountdownActivity">
 
-    <Button
-        android:id="@+id/endButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="@color/colorAccent"
-        android:onClick="cancelSprint"
-        android:text="@string/end_button_text"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/countdownText" />
-
     <TextView
         android:id="@+id/countdownText"
         android:layout_width="wrap_content"
@@ -29,5 +16,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/endButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/colorAccent"
+        android:text="@string/end_button_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/countdownText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
