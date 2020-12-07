@@ -19,13 +19,13 @@ import java.util.LinkedList;
 public class SprintHistoryFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
-    private SprintListAdapter mAdapter;
     private Spinner mSpinnerProjects;
     private TextView mProjectName;
     private DatabaseHelper mDB;
     private View mView;
+    SprintListAdapter mAdapter;
     ArrayList<Project> projects;
-
+    LinkedList<Sprint> sprintList;
 
     public SprintHistoryFragment() {
     }
@@ -57,7 +57,7 @@ public class SprintHistoryFragment extends Fragment {
                 // GET SPRINTS RELATED TO PROJECT
                 Project selectedProject = (Project) mSpinnerProjects.getSelectedItem();
                 String selectedProjectId = String.valueOf(selectedProject.getId());
-                LinkedList<Sprint> sprintList = mDB.getSprintsForProject(selectedProjectId);
+                sprintList = mDB.getSprintsForProject(selectedProjectId);
 
                 // POPULATE RECYCLER VIEW
                 mRecyclerView = mView.findViewById(R.id.LogRecyclerView);

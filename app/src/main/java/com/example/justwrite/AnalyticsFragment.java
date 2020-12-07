@@ -21,13 +21,14 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class AnalyticsFragment extends Fragment {
     private RecyclerView mRecyclerView;
-    private AnalyticListAdapter mAdapter;
+    public AnalyticListAdapter mAdapter;
     private Spinner mSpinnerProjects;
     private DatabaseHelper mDB;
     private TextView mProjectName;
     private SharedPreferences mSharedPreferences;
     private View mView;
     ArrayList<Project> projects;
+    LinkedList<Analytic> analyticsList;
 
     private static final String KEY_WORD_COUNT = "Word Count";
     private static final String KEY_TIME = "Time";
@@ -68,7 +69,7 @@ public class AnalyticsFragment extends Fragment {
                 // GET BASIC STATS FOR THAT PROJECT
                 Project selectedProject = (Project) mSpinnerProjects.getSelectedItem();
                 String selectedProjectId = String.valueOf(selectedProject.getId());
-                LinkedList<Analytic> analyticsList = restoreAnalyticPreferences(selectedProjectId);
+                analyticsList = restoreAnalyticPreferences(selectedProjectId);
 
                 // POPULATE RECYCLER VIEW
                 mRecyclerView = mView.findViewById(R.id.LogRecyclerView);

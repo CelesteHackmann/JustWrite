@@ -86,8 +86,11 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         boolean changesMade = data.getBooleanExtra("Changes Made", false);
         if(resultCode == RESULT_OK && changesMade) {
-            if (requestCode == RESULT_PROJECTS_EDITED || requestCode == RESULT_NEW_ANALYTICS_CHOSEN) {
-                fragmentManager.beginTransaction().detach(activeFragment).attach(activeFragment).commit();
+            if (requestCode == RESULT_PROJECTS_EDITED ) {
+                refreshAllFragments();
+            }
+            else if (requestCode == RESULT_NEW_ANALYTICS_CHOSEN) {
+                fragmentManager.beginTransaction().detach(fragmentAnalytics).attach(fragmentAnalytics).hide(fragmentAnalytics).commit();
             }
         }
     }
@@ -97,6 +100,14 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager.beginTransaction().add(R.id.host_fragment, activeFragment).show(activeFragment).commit();
         fragmentManager.beginTransaction().add(R.id.host_fragment, fragmentSprintHistory).hide(fragmentSprintHistory).commit();
         fragmentManager.beginTransaction().add(R.id.host_fragment, fragmentAnalytics).hide(fragmentAnalytics).commit();
+    }
+
+    private void refreshAllFragments() {
+        fragmentManager.beginTransaction().detach(fragmentTimerSetup).attach(fragmentTimerSetup).commit();
+        fragmentManager.beginTransaction().detach(fragmentAnalytics).attach(fragmentAnalytics).commit();
+        fragmentManager.beginTransaction().detach(fragmentSprintHistory).attach(fragmentSprintHistory).commit();
+        fragmentManager.beginTransaction().hide(fragmentSprintHistory).hide(fragmentAnalytics).hide(fragmentTimerSetup).commit();
+        fragmentManager.beginTransaction().show(activeFragment).commit();
     }
 }
 
