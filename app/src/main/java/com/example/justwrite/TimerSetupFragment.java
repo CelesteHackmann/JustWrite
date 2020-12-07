@@ -93,8 +93,8 @@ public class TimerSetupFragment extends Fragment {
         // Set Up Project Stats for new Project
         mDB.insertProjectStats(currentProjectId);
 
-        Project project = new Project(pName, pGenre, currentProjectId);
         // Create project for spinner
+        Project project = new Project(pName, pGenre, currentProjectId);
         projectAndIds.add(project);
         arrayAdapter.notifyDataSetChanged();
         mSpinnerProjects.setSelection(arrayAdapter.getPosition(project));

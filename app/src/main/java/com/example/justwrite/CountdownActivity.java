@@ -143,6 +143,7 @@ public class CountdownActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         mTimer.cancel();
                         mNotifyManager.cancelAll();
+                        setResult(RESULT_CANCELED, new Intent());
                         finish();
                     }
                 })
