@@ -13,7 +13,7 @@
 
     <string name="project_title_hint">Project Title</string>
     <string name="project_genre_hint">Project Genre</string>
-    
+
     <string name="words_written_text">Words Written</string>
     <string name="edit_projects_item">Edit Projects</string>
     <string name="choose_analytics_item">Choose Analytics</string>

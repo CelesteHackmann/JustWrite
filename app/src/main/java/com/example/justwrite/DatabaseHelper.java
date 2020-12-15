@@ -25,6 +25,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // PROJECTS Table Column Names
     public static final String KEY_TITLE = "title";
     public static final String KEY_GENRE = "genre";
+    private static final String KEY_PROJECT_ARCHIVED = "archived";
 
     // SPRINTS Table Column Names
     public static final String KEY_SPRINT_TIME = "sprint_time";
@@ -41,7 +42,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // PROJECTS Table Create Statement
     public static final String CREATE_TABLE_PROJECTS = "CREATE TABLE " + PROJECTS_TABLE
             + "(" + KEY_PROJECT_ID + " INTEGER PRIMARY KEY," + KEY_TITLE + " TEXT,"
-            + KEY_GENRE + " TEXT)";
+            + KEY_GENRE + " TEXT," + KEY_PROJECT_ARCHIVED + " INTEGER)";
 
     // SPRINTS Table Create Statement
     public static final String CREATE_TABLE_SPRINTS = "CREATE TABLE " + SPRINTS_TABLE
@@ -83,6 +84,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues projectValues = new ContentValues();
         projectValues.put(KEY_TITLE, pName);
         projectValues.put(KEY_GENRE, pGenre);
+        projectValues.put(KEY_PROJECT_ARCHIVED, false);
         long projectId = db.insert(PROJECTS_TABLE, null, projectValues);
         db.close();
         return projectId;
@@ -247,6 +249,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         return sprintList;
+    }
+
+    public int projectIsArchived(String selectedProjectId) {
+        Cursor cursor = getReadableDatabase().query(PROJECTS_TABLE,
+                new String[]{KEY_PROJECT_ARCHIVED},
+                KEY_PROJECT_ID + "=?",
+                new String[] {selectedProjectId},
+                null, null, null);
+        if (cursor.moveToNext()) {
+            return cursor.getInt(cursor.getColumnIndex(KEY_PROJECT_ARCHIVED));
+        }
+        return -1;
+    }
+
+    public void setProjectAsArchived(String selectedProjectId) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues projectValues = new ContentValues();
+        projectValues.put(KEY_PROJECT_ARCHIVED, 1);
+        String selection = KEY_PROJECT_ID + " LIKE ?";
+        String[] selectionArgs = {selectedProjectId};
+        db.update(PROJECTS_TABLE, projectValues, selection, selectionArgs);
+        db.close();
+    }
+
+    public void setProjectAsUnarchived(String selectedProjectId) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues projectValues = new ContentValues();
+        projectValues.put(KEY_PROJECT_ARCHIVED, 0);
+        String selection = KEY_PROJECT_ID + " LIKE ?";
+        String[] selectionArgs = {selectedProjectId};
+        db.update(PROJECTS_TABLE, projectValues, selection, selectionArgs);
+        db.close();
     }
 
     public Analytic getWordsPerMinuteAnalyticForProject(String selectedProjectId) {

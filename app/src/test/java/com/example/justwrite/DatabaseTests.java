@@ -190,6 +190,27 @@ public class DatabaseTests {
         assertEquals(expected, avgSprintTime);
     }
 
+    @Test
+    public void projectArchivedInitiallyFalse() {
+        int projectArchived = db.projectIsArchived(projectYoungAdult1.getId());
+        assertEquals(0, projectArchived);
+    }
+
+    @Test
+    public void setProjectToBeArchived() {
+        db.setProjectAsArchived(projectYoungAdult1.getId());
+        int projectArchived = db.projectIsArchived(projectYoungAdult1.getId());
+        assertEquals(1, projectArchived);
+    }
+
+    @Test
+    public void setProjectToBeUnarchived() {
+        db.setProjectAsArchived(projectTeenFiction3.getId());
+        db.setProjectAsUnarchived(projectTeenFiction3.getId());
+        int projectArchived = db.projectIsArchived(projectTeenFiction3.getId());
+        assertEquals(0, projectArchived);
+    }
+
     private void updateProjectStatsThreeTimesForProject(String projectId) {
         db.updateProjectStats(500, 24, 123, projectId);
         db.updateProjectStats(150, 0, 200, projectId);
