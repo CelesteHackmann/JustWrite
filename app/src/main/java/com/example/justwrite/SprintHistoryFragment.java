@@ -36,7 +36,7 @@ public class SprintHistoryFragment extends Fragment {
         mDB = DatabaseHelper.getInstance(getContext());
         mProjectName = mView.findViewById(R.id.selected_project_name);
 
-        projects = mDB.getProjectList();
+        projects = mDB.getUnarchivedProjectList();
         if (projects.size() > 0) {
             setupProjectSpinner(projects);
         }

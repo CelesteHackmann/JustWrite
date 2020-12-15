@@ -164,6 +164,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return projects;
     }
 
+    public ArrayList<Project> getUnarchivedProjectList() {
+        ArrayList<Project> projects = new ArrayList<>();
+        Cursor cursor = getReadableDatabase().query(
+                PROJECTS_TABLE,
+                null,
+                KEY_PROJECT_ARCHIVED + "=?",
+                new String[] {"0"},
+                null,
+                null,
+                null
+        );
+        while (cursor.moveToNext()) {
+            projects.add(new Project(cursor.getString(cursor.getColumnIndex(KEY_TITLE)),
+                    cursor.getString(cursor.getColumnIndex(KEY_GENRE)),
+                    cursor.getString(cursor.getColumnIndex(KEY_PROJECT_ID))));
+        }
+        cursor.close();
+        return projects;
+    }
+
     public int getTotalWordCount(String currentProjectId) {
         Cursor cursor = getReadableDatabase().query(
                 PROJECTS_STATS_TABLE,
@@ -251,16 +271,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return sprintList;
     }
 
-    public int projectIsArchived(String selectedProjectId) {
+    public boolean projectIsArchived(String selectedProjectId) {
         Cursor cursor = getReadableDatabase().query(PROJECTS_TABLE,
                 new String[]{KEY_PROJECT_ARCHIVED},
                 KEY_PROJECT_ID + "=?",
                 new String[] {selectedProjectId},
                 null, null, null);
+        boolean result = false;
         if (cursor.moveToNext()) {
-            return cursor.getInt(cursor.getColumnIndex(KEY_PROJECT_ARCHIVED));
+            if (cursor.getInt(cursor.getColumnIndex(KEY_PROJECT_ARCHIVED)) == 1) {
+                result = true;
+            }
+            else {
+                result = false;
+            }
         }
-        return -1;
+        cursor.close();
+        return result;
+    }
+
+    public void switchProjectedArchived(String selectedProjectId) {
+        if (projectIsArchived(selectedProjectId)) {
+            setProjectAsUnarchived(selectedProjectId);
+        }
+        else {
+            setProjectAsArchived(selectedProjectId);
+        }
     }
 
     public void setProjectAsArchived(String selectedProjectId) {

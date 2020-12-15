@@ -37,6 +37,13 @@ public class EditProjectAdapter extends RecyclerView.Adapter<EditProjectAdapter.
         Project current = mProjectList.get(position);
         holder.editProjectTitle.setText(current.getTitle());
         holder.editProjectGenre.setText(current.getGenre());
+        DatabaseHelper db = DatabaseHelper.getInstance(mContext);
+        if (db.projectIsArchived(current.getId())) {
+            holder.editProjectVisibilityButton.setText("Unarchive Project");
+        }
+        else {
+            holder.editProjectVisibilityButton.setText("Archive Project");
+        }
         holder.currentProjectId = current.getId();
     }
 
@@ -53,6 +60,7 @@ public class EditProjectAdapter extends RecyclerView.Adapter<EditProjectAdapter.
         public final EditText editProjectTitle;
         public final EditText editProjectGenre;
         public final Button updateProjectButton;
+        public final Button editProjectVisibilityButton;
         public String currentProjectId;
 
         public EditProjectViewHolder(final View itemView) {
@@ -60,15 +68,29 @@ public class EditProjectAdapter extends RecyclerView.Adapter<EditProjectAdapter.
             editProjectTitle = itemView.findViewById(R.id.editTextProjectTitle);
             editProjectGenre = itemView.findViewById(R.id.editTextProjectGenre);
             updateProjectButton = itemView.findViewById(R.id.updateProjectButton);
+            editProjectVisibilityButton = itemView.findViewById(R.id.changeArchiveButton);
+            final DatabaseHelper db = DatabaseHelper.getInstance(mContext);
             updateProjectButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     String newTitle = String.valueOf(editProjectTitle.getText());
                     String newGenre = String.valueOf(editProjectGenre.getText());
-                    DatabaseHelper db = DatabaseHelper.getInstance(mContext);
                     db.updateProjectTitleAndGenre(currentProjectId, newTitle, newGenre);
                     changesMade = true;
                     Toast.makeText(mContext, "Project Updated!", Toast.LENGTH_SHORT).show();
+                }
+            });
+            editProjectVisibilityButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    db.switchProjectedArchived(currentProjectId);
+                    changesMade = true;
+                    if (db.projectIsArchived(currentProjectId)) {
+                        editProjectVisibilityButton.setText("Unarchive Project");
+                    }
+                    else {
+                        editProjectVisibilityButton.setText("Archive Project");
+                    }
                 }
             });
         }

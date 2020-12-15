@@ -104,10 +104,16 @@ public class TimerSetupFragment extends Fragment {
         projectAndIds.add(project);
         arrayAdapter.notifyDataSetChanged();
         mSpinnerProjects.setSelection(arrayAdapter.getPosition(project));
+
+        // Refresh Fragments with New Data
+        if (getActivity().getClass() == MainActivity.class) {
+            MainActivity activity = (MainActivity) getActivity();
+            activity.refreshHistoryAndAnalyticsFragments();
+        }
     }
 
     private void setUpProjectSpinner() {
-        projectAndIds = mDB.getProjectList();
+        projectAndIds = mDB.getUnarchivedProjectList();
         projectAndIds.add(0, defaultProjectAndId);
         arrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, projectAndIds);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

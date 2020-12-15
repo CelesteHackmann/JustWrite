@@ -73,6 +73,19 @@ public class DatabaseTests {
     }
 
     @Test
+    public void getUnarchivedProjects_TwoOfThreeProjects() {
+        db.setProjectAsArchived(projectAdult2.getId());
+        ArrayList<Project> result = db.getUnarchivedProjectList();
+        ArrayList<Project> expectedList = new ArrayList<>();
+        expectedList.add(projectYoungAdult1);
+        expectedList.add(projectTeenFiction3);
+        assertEquals(expectedList.size(), result.size());
+        for (Project project : expectedList) {
+            assertTrue(result.contains(project));
+        }
+    }
+
+    @Test
     public void insertAndGetSprints_OneBasicSprint() {
         LinkedList<Sprint> expectedList = new LinkedList<>();
         expectedList.add(sprint1);
@@ -192,23 +205,32 @@ public class DatabaseTests {
 
     @Test
     public void projectArchivedInitiallyFalse() {
-        int projectArchived = db.projectIsArchived(projectYoungAdult1.getId());
-        assertEquals(0, projectArchived);
+        boolean projectArchived = db.projectIsArchived(projectYoungAdult1.getId());
+        assertEquals(false, projectArchived);
     }
 
     @Test
     public void setProjectToBeArchived() {
         db.setProjectAsArchived(projectYoungAdult1.getId());
-        int projectArchived = db.projectIsArchived(projectYoungAdult1.getId());
-        assertEquals(1, projectArchived);
+        boolean projectArchived = db.projectIsArchived(projectYoungAdult1.getId());
+        assertEquals(true, projectArchived);
     }
 
     @Test
     public void setProjectToBeUnarchived() {
         db.setProjectAsArchived(projectTeenFiction3.getId());
         db.setProjectAsUnarchived(projectTeenFiction3.getId());
-        int projectArchived = db.projectIsArchived(projectTeenFiction3.getId());
-        assertEquals(0, projectArchived);
+        boolean projectArchived = db.projectIsArchived(projectTeenFiction3.getId());
+        assertEquals(false, projectArchived);
+    }
+
+    @Test
+    public void switchProjectArchived_MultipleTimes() {
+        String projectId = projectTeenFiction3.getId();
+        db.switchProjectedArchived(projectId);
+        assertEquals(true, db.projectIsArchived(projectId));
+        db.switchProjectedArchived(projectId);
+        assertEquals(false, db.projectIsArchived(projectId));
     }
 
     private void updateProjectStatsThreeTimesForProject(String projectId) {
