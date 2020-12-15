@@ -30,4 +30,7 @@
     <string name="words_per_30_minutes_text">Words Per 30 Minutes</string>
     <string name="average_words_per_sprint_text">Average Words Per Sprint</string>
     <string name="average_sprint_time_text">Average Sprint Time</string>
+    <string name="unarchive_button_text">Unarchive Project</string>
+    <string name="archive_button_text">Archive Project</string>
+    <string name="words_hint">words</string>
 </resources>

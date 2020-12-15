@@ -282,9 +282,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             if (cursor.getInt(cursor.getColumnIndex(KEY_PROJECT_ARCHIVED)) == 1) {
                 result = true;
             }
-            else {
-                result = false;
-            }
         }
         cursor.close();
         return result;

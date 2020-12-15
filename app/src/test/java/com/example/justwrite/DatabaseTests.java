@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.LinkedList;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
@@ -206,14 +207,14 @@ public class DatabaseTests {
     @Test
     public void projectArchivedInitiallyFalse() {
         boolean projectArchived = db.projectIsArchived(projectYoungAdult1.getId());
-        assertEquals(false, projectArchived);
+        assertFalse(projectArchived);
     }
 
     @Test
     public void setProjectToBeArchived() {
         db.setProjectAsArchived(projectYoungAdult1.getId());
         boolean projectArchived = db.projectIsArchived(projectYoungAdult1.getId());
-        assertEquals(true, projectArchived);
+        assertTrue(projectArchived);
     }
 
     @Test
@@ -221,16 +222,16 @@ public class DatabaseTests {
         db.setProjectAsArchived(projectTeenFiction3.getId());
         db.setProjectAsUnarchived(projectTeenFiction3.getId());
         boolean projectArchived = db.projectIsArchived(projectTeenFiction3.getId());
-        assertEquals(false, projectArchived);
+        assertFalse(projectArchived);
     }
 
     @Test
     public void switchProjectArchived_MultipleTimes() {
         String projectId = projectTeenFiction3.getId();
         db.switchProjectedArchived(projectId);
-        assertEquals(true, db.projectIsArchived(projectId));
+        assertTrue(db.projectIsArchived(projectId));
         db.switchProjectedArchived(projectId);
-        assertEquals(false, db.projectIsArchived(projectId));
+        assertFalse(db.projectIsArchived(projectId));
     }
 
     private void updateProjectStatsThreeTimesForProject(String projectId) {

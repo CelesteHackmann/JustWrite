@@ -39,10 +39,10 @@ public class EditProjectAdapter extends RecyclerView.Adapter<EditProjectAdapter.
         holder.editProjectGenre.setText(current.getGenre());
         DatabaseHelper db = DatabaseHelper.getInstance(mContext);
         if (db.projectIsArchived(current.getId())) {
-            holder.editProjectVisibilityButton.setText("Unarchive Project");
+            holder.editProjectVisibilityButton.setText(R.string.unarchive_button_text);
         }
         else {
-            holder.editProjectVisibilityButton.setText("Archive Project");
+            holder.editProjectVisibilityButton.setText(R.string.archive_button_text);
         }
         holder.currentProjectId = current.getId();
     }
@@ -86,10 +86,10 @@ public class EditProjectAdapter extends RecyclerView.Adapter<EditProjectAdapter.
                     db.switchProjectedArchived(currentProjectId);
                     changesMade = true;
                     if (db.projectIsArchived(currentProjectId)) {
-                        editProjectVisibilityButton.setText("Unarchive Project");
+                        editProjectVisibilityButton.setText(R.string.unarchive_button_text);
                     }
                     else {
-                        editProjectVisibilityButton.setText("Archive Project");
+                        editProjectVisibilityButton.setText(R.string.archive_button_text);
                     }
                 }
             });
