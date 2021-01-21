@@ -90,7 +90,8 @@ public class MainActivity extends AppCompatActivity {
                 refreshAllFragments();
             }
             else if (requestCode == RESULT_NEW_ANALYTICS_CHOSEN) {
-                fragmentManager.beginTransaction().detach(fragmentAnalytics).attach(fragmentAnalytics).hide(fragmentAnalytics).commit();
+                fragmentManager.beginTransaction().detach(fragmentAnalytics).attach(fragmentAnalytics)
+                        .hide(fragmentAnalytics).show(activeFragment).commit();
             }
         }
     }
