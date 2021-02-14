@@ -9,14 +9,21 @@
         android:id="@+id/sprintWordCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="24sp"/>
+        android:textColor="#000000"
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/sprint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"/>
+        android:textColor="#000000"
+        android:textSize="18sp" />
 
+    <View
+        android:id="@+id/sprintListDivider"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="?android:attr/listDivider" />
 
 
 </LinearLayout>
