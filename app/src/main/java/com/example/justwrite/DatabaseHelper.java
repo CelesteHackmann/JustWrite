@@ -378,11 +378,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Analytic wordCountAnalytic = new Analytic("Total Time", "0:00");
         if (cursor.moveToNext()) {
             int totalSeconds = cursor.getInt(cursor.getColumnIndex(KEY_TOTAL_TIME));
-            int minutes = totalSeconds / 60;
+            int hours = totalSeconds / 3600;
+            int minutes = totalSeconds / 60 - (hours*60);
             int seconds = totalSeconds % 60;
-            String minuteString = String.valueOf(minutes);
-            String secondString = String.format("%02d", seconds);
-            wordCountAnalytic = new Analytic("Total Time", minuteString + ":" + secondString);
+            String hourString = "";
+            if (hours != 0) {
+                hourString = hours + " hours\n";
+            }
+            String minuteString = minutes + " minutes\n";
+            String secondString = seconds + " seconds";
+            wordCountAnalytic = new Analytic("Total Time", hourString + minuteString + secondString);
         }
         cursor.close();
         return wordCountAnalytic;
