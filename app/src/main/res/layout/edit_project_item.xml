@@ -37,12 +37,16 @@
 
         <Button
             android:id="@+id/updateProjectButton"
+            style="@style/Widget.AppCompat.Button"
+            android:backgroundTint="@color/colorAccent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/update_project_button_text" />
 
         <Button
             android:id="@+id/changeArchiveButton"
+            style="@style/Widget.AppCompat.Button"
+            android:backgroundTint="@color/colorAccent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
