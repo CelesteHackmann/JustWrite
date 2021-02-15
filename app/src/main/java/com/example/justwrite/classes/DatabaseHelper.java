@@ -287,7 +287,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    public void switchProjectedArchived(String selectedProjectId) {
+    public void toggleProjectVisibility(String selectedProjectId) {
         if (projectIsArchived(selectedProjectId)) {
             setProjectAsUnarchived(selectedProjectId);
         }

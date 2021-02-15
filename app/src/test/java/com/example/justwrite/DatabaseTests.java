@@ -233,9 +233,9 @@ public class DatabaseTests {
     @Test
     public void switchProjectArchived_MultipleTimes() {
         String projectId = projectTeenFiction3.getId();
-        db.switchProjectedArchived(projectId);
+        db.toggleProjectVisibility(projectId);
         assertTrue(db.projectIsArchived(projectId));
-        db.switchProjectedArchived(projectId);
+        db.toggleProjectVisibility(projectId);
         assertFalse(db.projectIsArchived(projectId));
     }
 

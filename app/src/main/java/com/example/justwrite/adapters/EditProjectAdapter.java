@@ -87,7 +87,7 @@ public class EditProjectAdapter extends RecyclerView.Adapter<EditProjectAdapter.
             editProjectVisibilityButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    db.switchProjectedArchived(currentProjectId);
+                    db.toggleProjectVisibility(currentProjectId);
                     changesMade = true;
                     toggleProjectVisibility(db);
                 }
