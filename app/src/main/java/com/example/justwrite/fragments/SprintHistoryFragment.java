@@ -60,21 +60,25 @@ public class SprintHistoryFragment extends Fragment {
         mSpinnerProjects.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // GET SPRINTS RELATED TO PROJECT
+                // GET SPRINTS RELATED TO SELECTED PROJECT
                 Project selectedProject = (Project) mSpinnerProjects.getSelectedItem();
                 String selectedProjectId = String.valueOf(selectedProject.getId());
                 sprintList = mDB.getSprintsForProject(selectedProjectId);
 
-                // POPULATE RECYCLER VIEW
-                mRecyclerView = mView.findViewById(R.id.LogRecyclerView);
-                mAdapter = new SprintListAdapter(getContext(), sprintList);
-                mRecyclerView.setAdapter(mAdapter);
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                mProjectName.setText(selectedProject.getTitle());
+                populateRecylerView(selectedProject);
+
             }
             @Override
             public void onNothingSelected(AdapterView <?> parent) {
             }
         });
+    }
+
+    private void populateRecylerView(Project selectedProject) {
+        mRecyclerView = mView.findViewById(R.id.LogRecyclerView);
+        mAdapter = new SprintListAdapter(getContext(), sprintList);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mProjectName.setText(selectedProject.getTitle());
     }
 }

@@ -76,18 +76,21 @@ public class AnalyticsFragment extends Fragment {
                 Project selectedProject = (Project) mSpinnerProjects.getSelectedItem();
                 String selectedProjectId = String.valueOf(selectedProject.getId());
                 analyticsList = restoreAnalyticPreferences(selectedProjectId);
-
-                // POPULATE RECYCLER VIEW
-                mRecyclerView = mView.findViewById(R.id.LogRecyclerView);
-                mAdapter = new AnalyticListAdapter(getContext(), analyticsList);
-                mRecyclerView.setAdapter(mAdapter);
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                mProjectName.setText(selectedProject.getTitle());
+                
+                populateRecyclerView(selectedProject);
             }
             @Override
             public void onNothingSelected(AdapterView <?> parent) {
             }
         });
+    }
+
+    private void populateRecyclerView(Project selectedProject) {
+        mRecyclerView = mView.findViewById(R.id.LogRecyclerView);
+        mAdapter = new AnalyticListAdapter(getContext(), analyticsList);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mProjectName.setText(selectedProject.getTitle());
     }
 
     private LinkedList<Analytic> restoreAnalyticPreferences(String selectedProjectId) {

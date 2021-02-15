@@ -35,6 +35,7 @@ public class SprintListAdapter extends RecyclerView.Adapter<SprintListAdapter.Sp
         Sprint mCurrent = mSprintList.get(position);
         holder.sprintWordCount.setText(mCurrent.getWordCount() + " words");
         holder.sprintItemView.setText(mCurrent.toString());
+        setSprintBackgroundColor(holder, mCurrent);
     }
 
     @Override
@@ -42,7 +43,23 @@ public class SprintListAdapter extends RecyclerView.Adapter<SprintListAdapter.Sp
         return mSprintList.size();
     }
 
+    private void setSprintBackgroundColor(@NonNull SprintViewHolder holder, Sprint mCurrent) {
+        int backgroundColor;
+        if (mCurrent.getUnfocusedSeconds() > 60) {
+            backgroundColor = R.color.unfocusedSprint;
+        }
+        else if (mCurrent.getUnfocusedSeconds() <= .25 * mCurrent.getSprintTimeSeconds()) {
+            backgroundColor = R.color.focusedSprint;
+        }
+        else {
+            backgroundColor = R.color.unfocusedSprint;
+        }
+        holder.sprintWordCount.setBackgroundResource(backgroundColor);
+        holder.sprintItemView.setBackgroundResource(backgroundColor);
+    }
+
     static class SprintViewHolder extends RecyclerView.ViewHolder {
+
         public final TextView sprintItemView;
         public final TextView sprintWordCount;
 

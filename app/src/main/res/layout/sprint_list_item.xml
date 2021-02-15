@@ -7,14 +7,14 @@
 
     <TextView
         android:id="@+id/sprintWordCount"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="#000000"
         android:textSize="24sp" />
 
     <TextView
         android:id="@+id/sprint"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="#000000"
         android:textSize="18sp" />
@@ -23,7 +23,7 @@
         android:id="@+id/sprintListDivider"
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="?android:attr/listDivider" />
+        android:background="@android:color/black" />
 
 
 </LinearLayout>

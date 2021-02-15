@@ -4,4 +4,7 @@
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#60E1D4</color>
     <color name="warningColor">#CDFF0000</color>
+
+    <color name="unfocusedSprint">#80FF0000</color>
+    <color name="focusedSprint">#8C00FF00</color>
 </resources>
