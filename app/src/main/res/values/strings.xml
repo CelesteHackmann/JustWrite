@@ -33,4 +33,5 @@
     <string name="unarchive_button_text">Unarchive Project</string>
     <string name="archive_button_text">Archive Project</string>
     <string name="words_hint">words</string>
+    <string name="help_item">Help</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.example.justwrite;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
     final FragmentManager fragmentManager = getSupportFragmentManager();
     private Fragment activeFragment;
     private Fragment fragmentToHide;
+
+    String helpLinkUrl = "https://docs.google.com/document/d/1XWBDkBCKa9hrgbLrisv5F_lHKgxEPXEUyMcg6iS2WPU/edit?usp=sharing";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,6 +79,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_choose_analytics:
                 intent = new Intent(this, ChooseAnalyticsActivity.class);
                 startActivityForResult(intent, RESULT_NEW_ANALYTICS_CHOSEN);
+                return true;
+            case R.id.action_help:
+                intent = new Intent(Intent.ACTION_VIEW, Uri.parse(helpLinkUrl));
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
