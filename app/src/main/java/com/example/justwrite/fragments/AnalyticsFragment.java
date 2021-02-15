@@ -76,7 +76,7 @@ public class AnalyticsFragment extends Fragment {
                 Project selectedProject = (Project) mSpinnerProjects.getSelectedItem();
                 String selectedProjectId = String.valueOf(selectedProject.getId());
                 analyticsList = restoreAnalyticPreferences(selectedProjectId);
-                
+
                 populateRecyclerView(selectedProject);
             }
             @Override
