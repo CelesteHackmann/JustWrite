@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private Fragment activeFragment;
     private Fragment fragmentToHide;
 
-    String helpLinkUrl = "https://docs.google.com/document/d/1XWBDkBCKa9hrgbLrisv5F_lHKgxEPXEUyMcg6iS2WPU/edit?usp=sharing";
+    final String helpLinkUrl = "https://docs.google.com/document/d/1XWBDkBCKa9hrgbLrisv5F_lHKgxEPXEUyMcg6iS2WPU/edit?usp=sharing";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

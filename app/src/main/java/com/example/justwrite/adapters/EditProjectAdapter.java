@@ -89,14 +89,18 @@ public class EditProjectAdapter extends RecyclerView.Adapter<EditProjectAdapter.
                 public void onClick(View v) {
                     db.switchProjectedArchived(currentProjectId);
                     changesMade = true;
-                    if (db.projectIsArchived(currentProjectId)) {
-                        editProjectVisibilityButton.setText(R.string.unarchive_button_text);
-                    }
-                    else {
-                        editProjectVisibilityButton.setText(R.string.archive_button_text);
-                    }
+                    toggleProjectVisibility(db);
                 }
             });
+        }
+
+        private void toggleProjectVisibility(DatabaseHelper db) {
+            if (db.projectIsArchived(currentProjectId)) {
+                editProjectVisibilityButton.setText(R.string.unarchive_button_text);
+            }
+            else {
+                editProjectVisibilityButton.setText(R.string.archive_button_text);
+            }
         }
     }
 }
