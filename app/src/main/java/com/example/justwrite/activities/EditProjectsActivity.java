@@ -1,4 +1,4 @@
-package com.example.justwrite;
+package com.example.justwrite.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.justwrite.R;
+import com.example.justwrite.adapters.EditProjectAdapter;
+import com.example.justwrite.classes.DatabaseHelper;
+import com.example.justwrite.classes.Project;
 
 import java.util.ArrayList;
 

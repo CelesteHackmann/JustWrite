@@ -1,5 +1,7 @@
 package com.example.justwrite;
 
+import com.example.justwrite.classes.Sprint;
+
 import org.junit.Test;
 
 import java.util.Calendar;

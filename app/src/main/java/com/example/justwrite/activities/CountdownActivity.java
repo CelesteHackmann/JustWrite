@@ -1,4 +1,4 @@
-package com.example.justwrite;
+package com.example.justwrite.activities;
 
 import android.app.AlertDialog;
 import android.app.KeyguardManager;
@@ -21,6 +21,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
+
+import com.example.justwrite.R;
 
 import java.util.Calendar;
 import java.util.Date;

@@ -1,4 +1,4 @@
-package com.example.justwrite;
+package com.example.justwrite.classes;
 
 import java.util.Objects;
 

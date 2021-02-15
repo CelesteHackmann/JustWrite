@@ -1,4 +1,4 @@
-package com.example.justwrite;
+package com.example.justwrite.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -17,6 +17,12 @@ import android.widget.Spinner;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.justwrite.R;
+import com.example.justwrite.activities.CountdownActivity;
+import com.example.justwrite.activities.MainActivity;
+import com.example.justwrite.classes.DatabaseHelper;
+import com.example.justwrite.classes.Project;
+import com.example.justwrite.classes.Sprint;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;

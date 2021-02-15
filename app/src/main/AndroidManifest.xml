@@ -9,17 +9,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".EditProjectsActivity"
-            android:parentActivityName=".MainActivity"/>
-        <activity android:name=".ChooseAnalyticsActivity"
-            android:parentActivityName=".MainActivity"/>
-        <activity android:name=".CountdownActivity"/>
+        <activity android:name=".activities.EditProjectsActivity"
+            android:parentActivityName=".activities.MainActivity"/>
+        <activity android:name=".activities.ChooseAnalyticsActivity"
+            android:parentActivityName=".activities.MainActivity"/>
+        <activity android:name=".activities.CountdownActivity"/>
     </application>
 
 </manifest>

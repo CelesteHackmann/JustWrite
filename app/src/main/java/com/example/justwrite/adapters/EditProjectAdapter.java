@@ -1,4 +1,4 @@
-package com.example.justwrite;
+package com.example.justwrite.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +10,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.justwrite.R;
+import com.example.justwrite.classes.DatabaseHelper;
+import com.example.justwrite.classes.Project;
 
 import java.util.ArrayList;
 

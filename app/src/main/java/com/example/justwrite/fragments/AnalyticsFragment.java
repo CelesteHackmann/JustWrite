@@ -1,4 +1,4 @@
-package com.example.justwrite;
+package com.example.justwrite.fragments;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,6 +13,12 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.justwrite.R;
+import com.example.justwrite.adapters.AnalyticListAdapter;
+import com.example.justwrite.classes.Analytic;
+import com.example.justwrite.classes.DatabaseHelper;
+import com.example.justwrite.classes.Project;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

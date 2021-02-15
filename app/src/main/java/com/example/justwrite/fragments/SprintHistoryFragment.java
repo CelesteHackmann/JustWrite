@@ -1,4 +1,4 @@
-package com.example.justwrite;
+package com.example.justwrite.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +12,12 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.justwrite.R;
+import com.example.justwrite.adapters.SprintListAdapter;
+import com.example.justwrite.classes.DatabaseHelper;
+import com.example.justwrite.classes.Project;
+import com.example.justwrite.classes.Sprint;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

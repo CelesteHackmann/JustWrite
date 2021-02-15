@@ -6,6 +6,11 @@ import android.os.Build;
 
 import androidx.test.core.app.ApplicationProvider;
 
+import com.example.justwrite.classes.Analytic;
+import com.example.justwrite.classes.DatabaseHelper;
+import com.example.justwrite.classes.Project;
+import com.example.justwrite.classes.Sprint;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -155,7 +160,7 @@ public class DatabaseTests {
         String projectId = projectYoungAdult1.getId();
         updateProjectStatsThreeTimesForProject(projectId);
         Analytic totalTimeAnalytic = db.getTotalTimeAnalyticForProject(projectId);
-        Analytic expected = new Analytic("Total Time", "15:10");
+        Analytic expected = new Analytic("Total Time", "15 minutes\n10 seconds");
         assertEquals(expected, totalTimeAnalytic);
     }
 

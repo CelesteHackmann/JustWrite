@@ -1,5 +1,7 @@
 package com.example.justwrite;
 
+import com.example.justwrite.classes.Project;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

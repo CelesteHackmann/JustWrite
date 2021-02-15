@@ -1,4 +1,4 @@
-package com.example.justwrite;
+package com.example.justwrite.activities;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -12,6 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.justwrite.R;
+import com.example.justwrite.fragments.AnalyticsFragment;
+import com.example.justwrite.fragments.SprintHistoryFragment;
+import com.example.justwrite.fragments.TimerSetupFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
